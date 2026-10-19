@@ -1,0 +1,147 @@
+export const locales = ['en', 'fr', 'nl'] as const
+export type Locale = (typeof locales)[number]
+export const defaultLocale: Locale = 'en'
+export const isLocale = (v: string | undefined | null): v is Locale => !!v && (locales as readonly string[]).includes(v)
+
+export const dateLocale: Record<Locale, string> = { en: 'en-GB', fr: 'fr-BE', nl: 'nl-BE' }
+
+const en = {
+  nav: { talents: 'Our talents', services: 'What we do', team: 'Our team', journal: 'Journal', contact: 'Contact', menu: 'Menu', close: 'Close', home: 'Home' },
+  facts: { players: 'Players represented', nationalities: 'Nationalities', leagues: 'Leagues', licence: 'FIFA licence' },
+  talents: {
+    title: 'Our talents',
+    intro: 'Every player has a profile with current club, contract and a link to Transfermarkt.',
+    all: 'All',
+    list: 'List',
+    photos: 'Photos',
+    empty: 'No players in this position yet.',
+  },
+  groups: { GK: 'Goalkeepers', DEF: 'Defenders', MID: 'Midfielders', FWD: 'Forwards' },
+  positions: {
+    goalkeeper: 'Goalkeeper', 'right-back': 'Right back', 'centre-back': 'Centre back', 'left-back': 'Left back',
+    'defensive-midfielder': 'Defensive midfielder', 'central-midfielder': 'Central midfielder', 'attacking-midfielder': 'Attacking midfielder',
+    'right-winger': 'Right winger', 'left-winger': 'Left winger', striker: 'Striker',
+  } as Record<string, string>,
+  profile: {
+    born: 'Born', age: 'Age', nationality: 'Nationality', club: 'Club', league: 'League', foot: 'Stronger foot', height: 'Height',
+    until: 'Contract until', number: 'Number', joined: 'With Numéro 10 since', transfermarkt: 'Transfermarkt profile',
+    highlights: 'Watch highlights', ask: 'Ask about this player', back: 'All talents', news: 'In the journal',
+    feet: { left: 'Left', right: 'Right', both: 'Both' } as Record<string, string>,
+  },
+  team: { title: 'Our team', intro: 'A small team, so every player and family knows who to call.', speaks: 'Speaks' },
+  services: { title: 'What we do', intro: 'One agent is responsible for each player. Lawyers, financial advisers and communication specialists join when the player needs them.' },
+  journal: {
+    title: 'Journal', all: 'All articles', back: 'Journal', empty: 'No articles published yet.',
+    categories: { signing: 'Signing', news: 'News', insight: 'Insight', opinion: 'Opinion', agency: 'Agency' } as Record<string, string>,
+  },
+  instagram: { title: 'On Instagram', follow: 'Follow us' },
+  contact: {
+    title: 'Contact',
+    intro: 'Players, families, clubs and brands can write to us here. We answer within two working days.',
+    email: 'Email', phone: 'Phone', office: 'Office',
+    who: 'I am',
+    types: { player: 'A player', family: 'Family of a player', club: 'A club', brand: 'A brand', partner: 'Another partner' } as Record<string, string>,
+    name: 'Full name', position: 'Position', currentClub: 'Current club', club: 'Club', role: 'Your role', company: 'Company',
+    website: 'Website', message: 'Message',
+    privacy: 'We use your details only to answer this message. See our privacy policy.',
+    send: 'Send message', sending: 'Sending…',
+    sent: 'Message sent. We will reply within two working days.',
+    error: 'The message could not be sent. Check the fields marked in the form, or write to us by email.',
+    required: 'Fill in your name, a valid email address and a message.',
+  },
+  footer: { talk: 'Talk to us', agency: 'Agency', follow: 'Follow', licence: 'Licence', licenceText: 'FIFA football agent, licence no.', privacy: 'Privacy policy' },
+  privacy: { title: 'Privacy policy' },
+}
+
+export type Dictionary = typeof en
+
+const fr: Dictionary = {
+  nav: { talents: 'Nos talents', services: 'Nos services', team: "L'équipe", journal: 'Journal', contact: 'Contact', menu: 'Menu', close: 'Fermer', home: 'Accueil' },
+  facts: { players: 'Joueurs représentés', nationalities: 'Nationalités', leagues: 'Championnats', licence: 'Licence FIFA' },
+  talents: {
+    title: 'Nos talents',
+    intro: 'Chaque joueur a son profil : club actuel, contrat et lien vers Transfermarkt.',
+    all: 'Tous', list: 'Liste', photos: 'Photos', empty: 'Aucun joueur à ce poste pour le moment.',
+  },
+  groups: { GK: 'Gardiens', DEF: 'Défenseurs', MID: 'Milieux', FWD: 'Attaquants' },
+  positions: {
+    goalkeeper: 'Gardien', 'right-back': 'Latéral droit', 'centre-back': 'Défenseur central', 'left-back': 'Latéral gauche',
+    'defensive-midfielder': 'Milieu défensif', 'central-midfielder': 'Milieu central', 'attacking-midfielder': 'Milieu offensif',
+    'right-winger': 'Ailier droit', 'left-winger': 'Ailier gauche', striker: 'Avant-centre',
+  },
+  profile: {
+    born: 'Né le', age: 'Âge', nationality: 'Nationalité', club: 'Club', league: 'Championnat', foot: 'Pied fort', height: 'Taille',
+    until: "Contrat jusqu'au", number: 'Numéro', joined: 'Chez Numéro 10 depuis', transfermarkt: 'Profil Transfermarkt',
+    highlights: 'Voir les highlights', ask: 'Se renseigner sur ce joueur', back: 'Tous les talents', news: 'Dans le journal',
+    feet: { left: 'Gauche', right: 'Droit', both: 'Les deux' },
+  },
+  team: { title: "L'équipe", intro: 'Une petite équipe, pour que chaque joueur et chaque famille sache qui appeler.', speaks: 'Parle' },
+  services: { title: 'Nos services', intro: 'Chaque joueur a un agent responsable. Avocats, conseillers financiers et spécialistes de la communication interviennent quand le joueur en a besoin.' },
+  journal: {
+    title: 'Journal', all: 'Tous les articles', back: 'Journal', empty: 'Aucun article publié pour le moment.',
+    categories: { signing: 'Signature', news: 'Actualité', insight: 'Analyse', opinion: 'Opinion', agency: 'Agence' },
+  },
+  instagram: { title: 'Sur Instagram', follow: 'Nous suivre' },
+  contact: {
+    title: 'Contact',
+    intro: 'Joueurs, familles, clubs et marques peuvent nous écrire ici. Nous répondons sous deux jours ouvrables.',
+    email: 'Email', phone: 'Téléphone', office: 'Bureau', who: 'Je suis',
+    types: { player: 'Joueur', family: "Famille d'un joueur", club: 'Un club', brand: 'Une marque', partner: 'Autre partenaire' },
+    name: 'Nom complet', position: 'Poste', currentClub: 'Club actuel', club: 'Club', role: 'Votre fonction', company: 'Entreprise',
+    website: 'Site web', message: 'Message',
+    privacy: 'Vos données servent uniquement à répondre à ce message. Voir notre politique de confidentialité.',
+    send: 'Envoyer le message', sending: 'Envoi…',
+    sent: 'Message envoyé. Nous répondons sous deux jours ouvrables.',
+    error: "Le message n'a pas pu être envoyé. Vérifiez les champs indiqués ou écrivez-nous par email.",
+    required: 'Indiquez votre nom, une adresse email valide et un message.',
+  },
+  footer: { talk: 'Parlons-en', agency: 'Agence', follow: 'Suivre', licence: 'Licence', licenceText: 'Agent de football FIFA, licence n°', privacy: 'Politique de confidentialité' },
+  privacy: { title: 'Politique de confidentialité' },
+}
+
+const nl: Dictionary = {
+  nav: { talents: 'Onze talenten', services: 'Wat we doen', team: 'Ons team', journal: 'Journal', contact: 'Contact', menu: 'Menu', close: 'Sluiten', home: 'Home' },
+  facts: { players: 'Vertegenwoordigde spelers', nationalities: 'Nationaliteiten', leagues: 'Competities', licence: 'FIFA-licentie' },
+  talents: {
+    title: 'Onze talenten',
+    intro: 'Elke speler heeft een profiel met huidige club, contract en een link naar Transfermarkt.',
+    all: 'Alle', list: 'Lijst', photos: "Foto's", empty: 'Nog geen spelers op deze positie.',
+  },
+  groups: { GK: 'Doelmannen', DEF: 'Verdedigers', MID: 'Middenvelders', FWD: 'Aanvallers' },
+  positions: {
+    goalkeeper: 'Doelman', 'right-back': 'Rechtsachter', 'centre-back': 'Centrale verdediger', 'left-back': 'Linksachter',
+    'defensive-midfielder': 'Verdedigende middenvelder', 'central-midfielder': 'Centrale middenvelder', 'attacking-midfielder': 'Aanvallende middenvelder',
+    'right-winger': 'Rechtsbuiten', 'left-winger': 'Linksbuiten', striker: 'Spits',
+  },
+  profile: {
+    born: 'Geboren', age: 'Leeftijd', nationality: 'Nationaliteit', club: 'Club', league: 'Competitie', foot: 'Voorkeursvoet', height: 'Lengte',
+    until: 'Contract tot', number: 'Nummer', joined: 'Bij Numéro 10 sinds', transfermarkt: 'Transfermarkt-profiel',
+    highlights: 'Bekijk highlights', ask: 'Vraag naar deze speler', back: 'Alle talenten', news: 'In het journal',
+    feet: { left: 'Links', right: 'Rechts', both: 'Beide' },
+  },
+  team: { title: 'Ons team', intro: 'Een klein team, zodat elke speler en elke familie weet wie ze moeten bellen.', speaks: 'Spreekt' },
+  services: { title: 'Wat we doen', intro: 'Elke speler heeft één verantwoordelijke agent. Advocaten, financieel adviseurs en communicatiespecialisten komen erbij wanneer de speler ze nodig heeft.' },
+  journal: {
+    title: 'Journal', all: 'Alle artikels', back: 'Journal', empty: 'Nog geen artikels gepubliceerd.',
+    categories: { signing: 'Transfer', news: 'Nieuws', insight: 'Analyse', opinion: 'Opinie', agency: 'Bureau' },
+  },
+  instagram: { title: 'Op Instagram', follow: 'Volg ons' },
+  contact: {
+    title: 'Contact',
+    intro: 'Spelers, families, clubs en merken kunnen ons hier schrijven. We antwoorden binnen twee werkdagen.',
+    email: 'Email', phone: 'Telefoon', office: 'Kantoor', who: 'Ik ben',
+    types: { player: 'Speler', family: 'Familie van een speler', club: 'Een club', brand: 'Een merk', partner: 'Andere partner' },
+    name: 'Volledige naam', position: 'Positie', currentClub: 'Huidige club', club: 'Club', role: 'Je functie', company: 'Bedrijf',
+    website: 'Website', message: 'Bericht',
+    privacy: 'We gebruiken je gegevens alleen om dit bericht te beantwoorden. Zie ons privacybeleid.',
+    send: 'Bericht versturen', sending: 'Versturen…',
+    sent: 'Bericht verstuurd. We antwoorden binnen twee werkdagen.',
+    error: 'Het bericht kon niet worden verstuurd. Controleer de aangeduide velden of mail ons rechtstreeks.',
+    required: 'Vul je naam, een geldig e-mailadres en een bericht in.',
+  },
+  footer: { talk: 'Praat met ons', agency: 'Bureau', follow: 'Volgen', licence: 'Licentie', licenceText: 'FIFA-voetbalagent, licentie nr.', privacy: 'Privacybeleid' },
+  privacy: { title: 'Privacybeleid' },
+}
+
+const dictionaries: Record<Locale, Dictionary> = { en, fr, nl }
+export const getDictionary = (locale: Locale) => dictionaries[locale] ?? en

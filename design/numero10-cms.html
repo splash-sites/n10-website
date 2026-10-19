@@ -1,0 +1,630 @@
+<title>Numéro 10 Studio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600..900&family=Barlow:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: the site's Roster look applied to a working tool. Black sidebar + content, condensed display only for page titles and numbers, Barlow for everything operated. State is shown with solid / outline / dim pills, no colour. */
+:root{
+  --bg:#000000;
+  --surface:#121212;
+  --raise:#1c1c1c;
+  --line:#2b2b2b;
+  --fg:#ffffff;
+  --soft:#bdbdbd;
+  --mute:#8a8a8a;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --text:"Barlow",ui-sans-serif,"Helvetica Neue",Arial,sans-serif;
+  --noise:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--text);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+p,h1,h2,h3,h4,ul{margin:0}
+ul{padding:0;list-style:none}
+:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.photo{background-color:#555;background-image:var(--noise),linear-gradient(var(--ang,160deg),var(--t1,#cfcfcf),var(--t2,#5d5d5d))}
+
+.app{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:100%}
+.side{border-right:1px solid var(--line);padding:22px 14px 22px max(14px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:26px;position:sticky;top:0;height:100vh;overflow:auto}
+.side .brand{display:flex;align-items:center;gap:10px;padding:0 8px}
+.side .brand img{height:22px;filter:invert(1)}
+.side .brand span{font-size:12px;color:var(--mute);border:1px solid var(--line);padding:1px 7px;border-radius:2px}
+.side h4{font-size:12px;font-weight:500;color:var(--mute);padding:0 10px;margin-bottom:6px}
+.side nav a{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:3px;text-decoration:none;color:var(--soft);font-weight:500}
+.side nav a:hover{background:var(--surface);color:var(--fg)}
+.side nav a[aria-current="page"]{background:var(--fg);color:var(--bg)}
+.side nav a .c{font-size:12px;font-variant-numeric:tabular-nums;color:inherit;opacity:.7}
+.side nav a .dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+.side .me{margin-top:auto;display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid var(--line)}
+.av{width:32px;height:32px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
+.me p{font-size:13px;line-height:1.3}
+.me small{color:var(--mute)}
+
+.main{min-width:0;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:14px;height:64px;padding:0 max(24px,env(safe-area-inset-right,0px)) 0 28px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
+.search{flex:1;max-width:420px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:0 12px;height:38px}
+.search input{background:none;border:0;outline:none;width:100%}
+.search kbd{font-family:var(--text);font-size:11px;color:var(--mute);border:1px solid var(--line);border-radius:2px;padding:0 5px}
+.top .sp{flex:1}
+.menu{display:none;background:none;border:1px solid var(--line);border-radius:3px;height:38px;padding:0 12px;cursor:pointer}
+.content{padding:32px max(24px,env(safe-area-inset-right,0px)) 80px 28px;max-width:1280px;width:100%}
+
+.ph{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:24px}
+.ph h1{font-family:var(--display);text-transform:uppercase;font-weight:800;font-size:clamp(2.5rem,5vw,3.75rem);line-height:.9}
+.ph p{color:var(--mute);margin-top:8px}
+.ph .acts{display:flex;gap:8px;flex-wrap:wrap}
+.crumb{font-size:13px;color:var(--mute);margin-bottom:10px}
+.crumb button{background:none;border:0;padding:0;color:var(--soft);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+.btn{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;border-radius:3px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:600;font-size:14px;text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:var(--mute)}
+.btn.pri{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.btn.ghost{background:none}
+
+.pill{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 9px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap}
+.pill.on{background:var(--fg);color:var(--bg)}
+.pill.out{border:1px solid var(--soft);color:var(--soft)}
+.pill.dim{background:var(--raise);color:var(--mute)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:4px}
+.panel > h3{font-size:14px;font-weight:600;padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.panel > h3 small{font-weight:400;color:var(--mute)}
+.pbody{padding:18px}
+
+/* overview */
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:12px}
+.kpi{padding:16px 18px}
+.kpi dt{font-size:13px;color:var(--mute)}
+.kpi dd{margin:4px 0 0;font-family:var(--display);font-weight:800;font-size:2.5rem;line-height:1;font-variant-numeric:tabular-nums}
+.kpi dd small{font-family:var(--text);font-size:13px;font-weight:500;color:var(--soft);margin-left:6px}
+.two{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:12px;align-items:start}
+.list li{display:flex;gap:14px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--line)}
+.list li:last-child{border-bottom:0}
+.list .grow{flex:1;min-width:0}
+.list .grow p:first-child{font-weight:600}
+.list .grow p+p{font-size:13px;color:var(--mute)}
+.bar{height:6px;background:var(--raise);border-radius:3px;overflow:hidden;width:120px;flex:none}
+.bar i{display:block;height:100%;background:var(--fg)}
+.quick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.quick .btn{justify-content:flex-start;height:46px}
+
+/* tables */
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:12px}
+.seg{display:flex;flex-wrap:wrap;gap:4px}
+.seg button{background:none;border:1px solid var(--line);border-radius:3px;padding:6px 12px;cursor:pointer;color:var(--soft);font-size:13px}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:820px}
+th{text-align:left;font-size:12px;font-weight:500;color:var(--mute);padding:10px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:middle;font-variant-numeric:tabular-nums}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--raise)}
+.handle{color:var(--mute);cursor:grab;width:28px;user-select:none}
+.thumb{width:36px;height:46px;border-radius:2px;flex:none}
+.who{display:flex;align-items:center;gap:12px}
+.who b{display:block;font-weight:600}
+.who small{color:var(--mute)}
+.num{font-family:var(--display);font-weight:800;font-size:22px}
+.exp{color:var(--fg);font-weight:600}
+
+/* toggles */
+.tg{position:relative;display:inline-flex;align-items:center;gap:10px;cursor:pointer}
+.tg input{position:absolute;opacity:0;width:1px;height:1px}
+.tg .sw{width:36px;height:20px;border-radius:999px;background:var(--raise);border:1px solid var(--line);position:relative;flex:none;transition:background .15s}
+.tg .sw::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--mute);transition:transform .15s,background .15s}
+.tg input:checked + .sw{background:var(--fg);border-color:var(--fg)}
+.tg input:checked + .sw::after{transform:translateX(16px);background:var(--bg)}
+.tg input:focus-visible + .sw{outline:2px solid var(--fg);outline-offset:2px}
+
+/* editor */
+.ed{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start}
+.stack{display:grid;gap:16px}
+.fgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.fgrid .w2{grid-column:span 2}
+.fgrid .w3{grid-column:1/-1}
+.f{display:grid;gap:6px;min-width:0}
+.f label{font-size:12px;color:var(--mute);display:flex;justify-content:space-between;gap:8px}
+.f input,.f select,.f textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:3px;padding:9px 11px;outline:none}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--fg)}
+.f textarea{min-height:120px;resize:vertical;line-height:1.55}
+.f .hint{font-size:12px;color:var(--mute)}
+.langtabs{display:flex;gap:2px}
+.langtabs button{background:none;border:0;padding:4px 8px;cursor:pointer;font-size:12px;font-weight:700;color:var(--mute);border-radius:2px}
+.langtabs button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.langtabs button .miss{display:inline-block;width:5px;height:5px;border-radius:50%;background:currentColor;margin-left:4px;vertical-align:middle;opacity:.8}
+.media{display:grid;grid-template-columns:150px repeat(4,minmax(0,1fr));gap:10px}
+.slot{aspect-ratio:3/4;border-radius:3px;position:relative;overflow:hidden}
+.slot.empty{border:1px dashed var(--mute);display:grid;place-items:center;text-align:center;color:var(--mute);font-size:12px;padding:8px;cursor:pointer;background:none}
+.slot .lab{position:absolute;left:0;right:0;bottom:0;padding:6px 8px;font-size:11px;background:linear-gradient(transparent,rgba(0,0,0,.8))}
+.media .slot:first-child{grid-row:span 2;aspect-ratio:auto}
+.rows-set{display:grid;gap:14px}
+.rows-set .r{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.rows-set .r p small{display:block;color:var(--mute);font-size:12px}
+.preview{position:sticky;top:84px}
+.card-prev .photo{aspect-ratio:3/4;position:relative;border-radius:2px}
+.card-prev .n{position:absolute;left:10px;top:4px;font-family:var(--display);font-weight:900;font-size:3.25rem;line-height:1}
+.card-prev .nm{margin-top:10px;font-family:var(--display);text-transform:uppercase;font-weight:800;font-size:1.6rem;line-height:1}
+.card-prev .mt{color:var(--mute);font-size:13px;margin-top:4px}
+.savebar{position:sticky;bottom:0;margin-top:20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;background:var(--fg);color:var(--bg);border-radius:4px}
+.savebar .btn{background:var(--bg);color:var(--fg);border-color:var(--bg)}
+.savebar .btn.ghost{background:none;color:var(--bg);border-color:rgba(0,0,0,.3)}
+
+/* rich text */
+.rte{border:1px solid var(--line);border-radius:3px;background:var(--bg)}
+.rte .tb{display:flex;flex-wrap:wrap;gap:2px;padding:6px;border-bottom:1px solid var(--line)}
+.rte .tb button{background:none;border:0;border-radius:2px;padding:4px 9px;cursor:pointer;color:var(--soft);font-size:13px;font-weight:600}
+.rte .tb button:hover{background:var(--raise);color:var(--fg)}
+.rte .tb .sep{width:1px;background:var(--line);margin:2px 4px}
+.rte .body{padding:16px 18px;min-height:280px;outline:none;line-height:1.65;color:#e6e6e6}
+.rte .body h2{font-family:var(--display);text-transform:uppercase;font-weight:800;font-size:1.75rem;margin:18px 0 6px}
+.rte .body p{margin-bottom:12px}
+.rte .body blockquote{margin:12px 0;padding-left:14px;border-left:3px solid var(--fg);color:var(--fg);font-weight:500}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{display:inline-flex;align-items:center;gap:6px;background:var(--raise);border-radius:3px;padding:4px 8px;font-size:13px}
+.tag button{background:none;border:0;padding:0;cursor:pointer;color:var(--mute)}
+
+/* pages editor */
+.secrow{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line)}
+.secrow:last-child{border-bottom:0}
+.secrow .grow{flex:1;min-width:0}
+.secrow .grow small{display:block;color:var(--mute);font-size:12px}
+
+/* instagram */
+.iggrid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.igp{position:relative;aspect-ratio:1;border-radius:3px;overflow:hidden}
+.igp .st{position:absolute;top:6px;left:6px}
+.igp .ac{position:absolute;inset:auto 6px 6px 6px;display:flex;gap:4px}
+.igp .ac button{flex:1;height:26px;border-radius:2px;border:0;cursor:pointer;font-size:12px;font-weight:600;background:rgba(0,0,0,.75);color:#fff}
+.igp .ac button[aria-pressed="true"]{background:#fff;color:#000}
+.igp.hid .photo{opacity:.25}
+
+/* inbox */
+.inbox{display:grid;grid-template-columns:340px minmax(0,1fr);border:1px solid var(--line);border-radius:4px;overflow:hidden;min-height:560px}
+.ilist{border-right:1px solid var(--line);overflow:auto}
+.ilist button{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:4px 10px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:14px 16px;cursor:pointer}
+.ilist button:hover{background:var(--surface)}
+.ilist button[aria-current="true"]{background:var(--raise)}
+.ilist .u{width:8px;height:8px;border-radius:50%;background:var(--fg);margin-top:6px}
+.ilist .u.read{background:none}
+.ilist b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ilist time{font-size:12px;color:var(--mute)}
+.ilist .s{grid-column:2/-1;font-size:13px;color:var(--mute);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.idetail{padding:24px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.idetail h2{font-family:var(--display);text-transform:uppercase;font-weight:800;font-size:2.25rem;line-height:.95}
+.idetail dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0;padding:16px 0;border-block:1px solid var(--line)}
+.idetail dt{font-size:12px;color:var(--mute)}
+.idetail dd{margin:2px 0 0;font-weight:600;overflow-wrap:anywhere}
+.idetail .msg{color:#e0e0e0;max-width:64ch;white-space:pre-line}
+
+/* login */
+.login{min-height:100vh;display:grid;place-items:center;padding:24px}
+.login .box{width:min(100%,380px);display:grid;gap:18px}
+.login img{height:44px;filter:invert(1);justify-self:start}
+.login h1{font-family:var(--display);text-transform:uppercase;font-weight:800;font-size:3rem;line-height:.9}
+
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);transform:translateX(-50%) translateY(20px);background:var(--fg);color:var(--bg);padding:12px 18px;border-radius:3px;font-weight:600;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:50}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.note{font-size:12px;color:var(--mute)}
+
+@media (max-width:1100px){
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .two,.ed{grid-template-columns:minmax(0,1fr)}
+  .preview{position:static}
+  .iggrid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media (max-width:860px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:fixed;inset:0 auto 0 0;width:260px;z-index:20;background:var(--bg);transform:translateX(-100%);transition:transform .2s}
+  .side.open{transform:none}
+  .menu{display:inline-flex;align-items:center}
+  .top{padding-left:max(16px,env(safe-area-inset-left,0px))}
+  .content{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  .search kbd{display:none}
+  .top .btn.ghost{display:none}
+  .inbox{grid-template-columns:minmax(0,1fr)}
+  .ilist{border-right:0;max-height:320px}
+  .fgrid{grid-template-columns:minmax(0,1fr)}
+  .fgrid .w2{grid-column:auto}
+  .media{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .media .slot:first-child{grid-row:auto;aspect-ratio:3/4}
+  .iggrid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .idetail dl{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:520px){
+  .kpis,.quick{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div id="loginView" class="login" hidden>
+  <form class="box" id="loginForm">
+    <img src="n10-logo.png" alt="Numéro 10">
+    <h1>Studio</h1>
+    <p class="note" style="font-size:14px">Sign in to edit the Numéro 10 website.</p>
+    <div class="f"><label for="l-email">Email</label><input id="l-email" type="email" autocomplete="username" placeholder="name@numero10.com"></div>
+    <div class="f"><label for="l-pass">Password</label><input id="l-pass" type="password" autocomplete="current-password"></div>
+    <button class="btn pri" type="submit" style="height:44px;justify-content:center">Sign in</button>
+    <p class="note">Forgot your password? We send a reset link to your email.</p>
+  </form>
+</div>
+
+<div class="app" id="appView">
+  <aside class="side" id="side">
+    <div class="brand"><img src="n10-logo.png" alt="Numéro 10"><span>Studio</span></div>
+    <nav aria-label="Content">
+      <h4>Overview</h4>
+      <a href="#" data-v="overview">Dashboard</a>
+      <a href="#" data-v="inbox">Messages <span class="c" id="navUnread">3 new</span></a>
+    </nav>
+    <nav aria-label="Content types">
+      <h4>Content</h4>
+      <a href="#" data-v="talents">Talents <span class="c">20</span></a>
+      <a href="#" data-v="journal">Journal <span class="c">24</span></a>
+      <a href="#" data-v="team">Team <span class="c">4</span></a>
+      <a href="#" data-v="pages">Pages <span class="c">6</span></a>
+      <a href="#" data-v="instagram">Instagram</a>
+    </nav>
+    <nav aria-label="Configuration">
+      <h4>Agency</h4>
+      <a href="#" data-v="settings">Settings</a>
+    </nav>
+    <div class="me"><span class="av">TL</span><div><p>Thomas Lambert<br><small>Admin</small></p></div></div>
+  </aside>
+
+  <div class="main">
+    <div class="top">
+      <button class="menu" type="button" id="menuBtn" aria-label="Open menu">Menu</button>
+      <label class="search"><input id="q" placeholder="Search players, articles, messages" aria-label="Search"><kbd>Ctrl K</kbd></label>
+      <span class="sp"></span>
+      <a class="btn ghost" href="https://claude.ai/artifact/8t2LfZggtavowAbBXEYM1o" target="_blank" rel="noopener">View website</a>
+      <button class="btn ghost" type="button" id="signOut">Sign out</button>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+const players = [
+  ["Arno Verbeke",1,"Goalkeeper","KAA Gent","2028-06-30","BEL"],["Moussa Ndiaye",30,"Goalkeeper","RWD Molenbeek","2027-06-30","SEN"],
+  ["Jens Van Acker",2,"Right back","Club Brugge","2029-06-30","BEL"],["Ibrahim Touré",4,"Centre back","Standard Liège","2027-06-30","CIV"],
+  ["Mathis Lefèvre",5,"Centre back","RC Lens","2028-06-30","FRA"],["Noah Peeters",3,"Left back","KRC Genk","2028-06-30","BEL"],
+  ["Kofi Mensah",22,"Right back","FC Utrecht","2027-06-30","GHA"],["Daan de Wit",15,"Centre back","Sparta Rotterdam","2027-06-30","NED"],
+  ["Yassine El Amrani",6,"Defensive midfielder","Royal Antwerp FC","2028-06-30","MAR"],["Rafael Couto",8,"Central midfielder","Vitória SC","2027-06-30","POR"],
+  ["Ilyas Benali",10,"Attacking midfielder","KRC Genk","2029-06-30","BEL"],["Teo Marchetti",14,"Central midfielder","KV Mechelen","2027-06-30","ITA"],
+  ["Samuel Kabongo",18,"Central midfielder","RSC Anderlecht U18","2027-06-30","COD"],["Lars Jacobs",23,"Defensive midfielder","OH Leuven","2027-06-30","BEL"],
+  ["Amadou Sow",7,"Right winger","Stade de Reims","2028-06-30","SEN"],["Jonas Claes",9,"Striker","Union Saint-Gilloise","2028-06-30","BEL"],
+  ["Bilal Haddadi",11,"Left winger","Cercle Brugge","2029-06-30","MAR"],["Nathan Mbemba",17,"Striker","SV Zulte Waregem","2027-06-30","CMR"],
+  ["Emil Sørensen",19,"Striker","AGF Aarhus","2027-06-30","DEN"],["Leandro Pires",21,"Right winger","KVC Westerlo","2028-06-30","BRA"]
+].map(([name,n,pos,club,until,nat],i)=>({i,name,n,pos,club,until,nat,pub:i!==7,wall:true,feat:[10,15,14,8].includes(i),langs:i%5===3?["EN","FR"]:["EN","FR","NL"]}));
+const posts = [
+  {t:"Ilyas Benali extends with KRC Genk until 2029",k:"Signing",s:"Published",d:"14 Oct 2026",by:"TL"},
+  {t:"Samuel Kabongo signs his first professional contract",k:"Signing",s:"Scheduled",d:"22 Oct 2026, 09:00",by:"LJ"},
+  {t:"January window: what we expect for Belgian under-21 players",k:"Insight",s:"Draft",d:"Edited 2 h ago",by:"TL"},
+  {t:"What clubs look at before signing a 19-year-old",k:"Insight",s:"Published",d:"2 Oct 2026",by:"TL"},
+  {t:"Why we sign fewer players than we are offered",k:"Agency",s:"Published",d:"21 Sep 2026",by:"TL"},
+  {t:"Amadou Sow completes his move to Stade de Reims",k:"Signing",s:"Published",d:"3 Sep 2026",by:"LJ"}
+];
+let msgs = [
+  {id:1,from:"Pieter Claessens",type:"Club",org:"KV Kortrijk, sporting director",email:"p.claessens@example.be",d:"Today, 10:42",read:false,sub:"Interest in Noah Peeters",msg:"Good morning,\n\nWe are following Noah Peeters closely and would like to understand his situation at Genk before the winter window. Could we schedule a call this week?\n\nKind regards,\nPieter"},
+  {id:2,from:"Fatou Diop",type:"Family",org:"Mother of a U17 player, Liège",email:"f.diop@example.com",d:"Today, 08:15",read:false,sub:"Representation for my son",msg:"Hello,\n\nMy son plays centre back for an academy in Liège and several agents have contacted us. We would like to meet you before deciding anything. He is 16.\n\nThank you,\nFatou"},
+  {id:3,from:"Studio Nord",type:"Brand",org:"Sportswear brand, Antwerp",email:"partners@example.com",d:"Yesterday, 17:30",read:false,sub:"Campaign with two players",msg:"Hi,\n\nWe are planning a spring campaign and would like to feature two of your players. Budget and dates attached in a follow-up if you are open to it."},
+  {id:4,from:"Lucas Morel",type:"Player",org:"Winger, 19, Ligue 2",email:"l.morel@example.fr",d:"16 Oct",read:true,sub:"Looking for an agent",msg:"Bonjour, je cherche un agent pour la prochaine étape de ma carrière. Je joue ailier droit en Ligue 2."},
+  {id:5,from:"Het Nieuwsblad",type:"Press",org:"Sports desk",email:"sport@example.be",d:"14 Oct",read:true,sub:"Interview request, Ilyas Benali",msg:"Could we interview Ilyas after the extension announcement? 20 minutes by phone is enough."}
+];
+const team = [["Thomas Lambert","Founder, FIFA football agent"],["Sarah Vermeulen","Legal and contracts"],["Karim Bensaïd","Scouting and player relations"],["Lotte Janssens","Communication and partnerships"]];
+
+function tone(i){
+  const r=(k)=>{const x=Math.sin((i+1)*91.7+k*13.3)*43758.5;return x-Math.floor(x)};
+  const a=175+Math.round(r(1)*55), b=60+Math.round(r(2)*60);
+  return `--t1:rgb(${a},${a},${a});--t2:rgb(${b},${b},${b});--ang:${140+Math.round(r(3)*60)}deg`;
+}
+const TODAY = new Date();
+const monthsLeft = (d)=> Math.round((new Date(d)-TODAY)/(1000*60*60*24*30.44));
+const fmtD = (d)=> new Date(d).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});
+const esc = (s)=> String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pillFor = (s)=> s==="Published"?`<span class="pill on">Published</span>`:s==="Scheduled"?`<span class="pill out">Scheduled</span>`:`<span class="pill dim">${s}</span>`;
+const C = document.getElementById("content");
+
+const toastEl = document.getElementById("toast"); let tt;
+function toast(m){ toastEl.textContent=m; toastEl.classList.add("show"); clearTimeout(tt); tt=setTimeout(()=>toastEl.classList.remove("show"),2200); }
+
+/* ---------- views ---------- */
+const V = {};
+
+V.overview = ()=>{
+  const unread = msgs.filter(m=>!m.read).length;
+  return `
+  <div class="ph"><div><h1>Good morning, Thomas</h1><p>Here is what changed on the website since Friday.</p></div></div>
+  <dl class="kpis">
+    <div class="panel kpi"><dt>New messages</dt><dd>${unread}<small>from clubs, families and brands</small></dd></div>
+    <div class="panel kpi"><dt>Players on the website</dt><dd>${players.filter(p=>p.pub).length}<small>of ${players.length}</small></dd></div>
+    <div class="panel kpi"><dt>Articles published</dt><dd>${posts.filter(p=>p.s==="Published").length}<small>2 this month</small></dd></div>
+    <div class="panel kpi"><dt>Journal drafts</dt><dd>${posts.filter(p=>p.s==="Draft").length}<small>1 scheduled</small></dd></div>
+  </dl>
+  <div class="two">
+    <div class="panel"><h3>Latest messages <small>Also sent to contact@numero10.com</small></h3>
+      <ul class="list">${msgs.slice(0,5).map(m=>`<li data-open-m="${m.id}" style="cursor:pointer"><span class="ilist" style="border:0"><span class="u ${m.read?"read":""}" style="display:block;width:8px;height:8px;border-radius:50%;background:${m.read?"transparent":"var(--fg)"}"></span></span><div class="grow"><p>${m.from}</p><p>${m.sub}</p></div><span class="pill out">${m.type}</span><span class="note">${m.d}</span></li>`).join("")}</ul>
+    </div>
+    <div class="stack">
+      <div class="panel"><h3>Quick actions</h3><div class="pbody quick">
+        <button class="btn" data-go="talent-new">Add a player</button>
+        <button class="btn" data-go="post">Write an article</button>
+        <button class="btn" data-go="pages">Edit the homepage</button>
+        <button class="btn" data-go="instagram">Choose Instagram posts</button>
+      </div></div>
+      <div class="panel"><h3>Recent changes</h3><ul class="list">
+        <li><span class="av">TL</span><div class="grow"><p>You scheduled an article</p><p>Samuel Kabongo signs his first professional contract</p></div></li>
+        <li><span class="av">TL</span><div class="grow"><p>You updated a player</p><p>Ilyas Benali, contract until 2029</p></div></li>
+        <li><span class="av">TL</span><div class="grow"><p>You hid a player</p><p>Daan de Wit is no longer on the website</p></div></li>
+      </ul></div>
+    </div>
+  </div>`;
+};
+
+let tFilter = "All";
+V.talents = ()=>{
+  const groups = ["All","Published","Hidden","On homepage"];
+  const L = players.filter(p=> tFilter==="All" || (tFilter==="Published"&&p.pub) || (tFilter==="Hidden"&&!p.pub) || (tFilter==="On homepage"&&p.feat));
+  return `
+  <div class="ph"><div><h1>Talents</h1><p>Drag rows to change the order on the website. Click a player to edit the profile.</p></div>
+    <div class="acts"><button class="btn pri" data-go="talent-new">Add a player</button></div></div>
+  <div class="tools"><div class="seg" id="tseg">${groups.map(g=>`<button type="button" aria-pressed="${g===tFilter}" data-f="${g}">${g}</button>`).join("")}</div><span class="note">${L.length} players</span></div>
+  <div class="panel tw"><table>
+    <thead><tr><th></th><th>No.</th><th>Player</th><th>Club</th><th>Contract until</th><th>Translations</th><th>Status</th><th>Homepage</th></tr></thead>
+    <tbody>${L.map(p=>{return `
+      <tr data-p="${p.i}">
+        <td class="handle" aria-hidden="true">⋮⋮</td>
+        <td class="num">${p.n}</td>
+        <td><div class="who"><span class="thumb photo" style="${tone(p.i)}"></span><div><b>${p.name}</b><small>${p.pos}, ${p.nat}</small></div></div></td>
+        <td>${p.club}</td>
+        <td>${fmtD(p.until)}</td>
+        <td>${p.langs.join(" ")}${p.langs.length<3?` <span class="pill out">NL missing</span>`:""}</td>
+        <td>${p.pub?`<span class="pill on">Published</span>`:`<span class="pill dim">Hidden</span>`}</td>
+        <td>${p.feat?`<span class="pill out">Featured</span>`:`<span class="note">Wall only</span>`}</td>
+      </tr>`}).join("")}</tbody></table></div>`;
+};
+
+let edLang = "EN";
+V.talent = (i)=>{
+  const isNew = i==null;
+  const p = isNew ? {i:99,name:"",n:"",pos:"Central midfielder",club:"",until:"2028-06-30",nat:"",pub:false,wall:true,feat:false,langs:[]} : players[i];
+  const bio = {EN:`${p.name.split(" ")[0]||"The player"} joined Numéro 10 in 2024. A left-footed attacking midfielder who plays between the lines, he made 31 league appearances last season.`,FR:`${p.name.split(" ")[0]||"Le joueur"} a rejoint Numéro 10 en 2024. Milieu offensif gaucher qui joue entre les lignes, il a disputé 31 matchs de championnat la saison dernière.`,NL:""};
+  return `
+  <p class="crumb"><button type="button" data-go="talents">Talents</button> / ${isNew?"New player":esc(p.name)}</p>
+  <div class="ph"><div><h1>${isNew?"New player":esc(p.name)}</h1><p>${isNew?"Fill in the profile. It stays hidden until you publish it.":`Last edited by Thomas, today at 09:12`}</p></div>
+    <div class="acts">${isNew?"":`<a class="btn ghost" href="https://claude.ai/artifact/8t2LfZggtavowAbBXEYM1o#talents" target="_blank" rel="noopener">View on website</a>`}</div></div>
+  <div class="ed">
+    <div class="stack">
+      <div class="panel"><h3>Player details</h3><div class="pbody fgrid">
+        <div class="f w2"><label for="e-name">Full name</label><input id="e-name" value="${esc(p.name)}" placeholder="First and last name"></div>
+        <div class="f"><label for="e-num">Shirt number</label><input id="e-num" inputmode="numeric" value="${p.n}"></div>
+        <div class="f"><label for="e-pos">Position</label><select id="e-pos">${["Goalkeeper","Right back","Centre back","Left back","Defensive midfielder","Central midfielder","Attacking midfielder","Right winger","Left winger","Striker"].map(o=>`<option ${o===p.pos?"selected":""}>${o}</option>`).join("")}</select></div>
+        <div class="f"><label for="e-born">Date of birth</label><input id="e-born" type="date" value="2004-05-09"></div>
+        <div class="f"><label for="e-nat">Nationality</label><input id="e-nat" value="${p.nat}" placeholder="Add one or more"></div>
+        <div class="f"><label for="e-club">Current club</label><input id="e-club" value="${esc(p.club)}"></div>
+        <div class="f"><label for="e-lg">League</label><input id="e-lg" value="${isNew?"":"Jupiler Pro League"}"></div>
+        <div class="f"><label for="e-until">Contract until</label><input id="e-until" type="date" value="${p.until}"></div>
+        <div class="f"><label for="e-foot">Stronger foot</label><select id="e-foot"><option>Left</option><option>Right</option><option>Both</option></select></div>
+        <div class="f"><label for="e-h">Height (cm)</label><input id="e-h" inputmode="numeric" value="${isNew?"":"174"}"></div>
+        <div class="f"><label for="e-on">Joined the agency</label><input id="e-on" type="month" value="2024-07"></div>
+      </div></div>
+
+      <div class="panel"><h3>Biography <span class="langtabs" id="langtabs">${["EN","FR","NL"].map(l=>`<button type="button" data-l="${l}" aria-pressed="${l===edLang}">${l}${bio[l]?"":'<span class="miss" aria-label="missing"></span>'}</button>`).join("")}</span></h3>
+        <div class="pbody"><div class="f"><label for="e-bio"><span>Short biography, ${edLang}</span><span id="bioCount">0 / 600</span></label><textarea id="e-bio" maxlength="600" placeholder="Not translated yet. The website shows the English text until this is filled in.">${bio[edLang]}</textarea>
+        <p class="hint">Two or three sentences: playing style, previous clubs, recent form.</p></div></div></div>
+
+      <div class="panel"><h3>Photos <small>JPG or PNG, at least 1600 px tall. Shown in black and white.</small></h3><div class="pbody media">
+        <div class="slot photo" style="${tone(p.i)}"><span class="lab">Portrait, used on the wall and in lists</span></div>
+        <div class="slot photo" style="${tone(p.i+30)}"><span class="lab">Action</span></div>
+        <div class="slot photo" style="${tone(p.i+31)}"><span class="lab">Gallery 1</span></div>
+        <div class="slot photo" style="${tone(p.i+32)}"><span class="lab">Gallery 2</span></div>
+        <button type="button" class="slot empty">Add photo</button>
+      </div></div>
+
+      <div class="panel"><h3>Links</h3><div class="pbody fgrid">
+        <div class="f w2"><label for="e-tm">Transfermarkt profile</label><input id="e-tm" type="url" value="${isNew?"":"https://www.transfermarkt.com/ilyas-benali/profil/spieler/000000"}" placeholder="https://www.transfermarkt.com/..."></div>
+        <div class="f"><label for="e-ig">Instagram</label><input id="e-ig" value="${isNew?"":"@ilyasbenali10"}" placeholder="@handle"></div>
+        <div class="f w3"><label for="e-yt">Highlights video (YouTube or Vimeo)</label><input id="e-yt" type="url" placeholder="https://"></div>
+      </div></div>
+    </div>
+
+    <div class="stack preview">
+      <div class="panel"><h3>Visibility</h3><div class="pbody rows-set">
+        <div class="r"><p>Published<small>Visible on the website</small></p><label class="tg"><input type="checkbox" id="t-pub" ${p.pub?"checked":""}><span class="sw"></span></label></div>
+        <div class="r"><p>Name on the homepage wall<small>The list of surnames at the top</small></p><label class="tg"><input type="checkbox" id="t-wall" ${p.wall?"checked":""}><span class="sw"></span></label></div>
+        <div class="r"><p>Featured<small>Shown first on the hero</small></p><label class="tg"><input type="checkbox" id="t-feat" ${p.feat?"checked":""}><span class="sw"></span></label></div>
+        <div class="r"><p>Under 18, family consent on file<small>Required before publishing a minor</small></p><label class="tg"><input type="checkbox" id="t-minor"><span class="sw"></span></label></div>
+      </div></div>
+      <div class="panel"><h3>Preview</h3><div class="pbody card-prev">
+        <div class="photo" style="${tone(p.i)}"><span class="n" id="pvNum">${p.n||"–"}</span></div>
+        <p class="nm" id="pvName">${esc(p.name)||"Player name"}</p><p class="mt" id="pvMeta">${p.pos}${p.club?", "+esc(p.club):""}</p>
+      </div></div>
+    </div>
+  </div>
+  <div class="savebar"><span>${isNew?"New player, not saved yet":"Unsaved changes"}</span><div style="display:flex;gap:8px">${isNew?"":`<button class="btn ghost" type="button" data-toast="Changes discarded" data-go="talents">Discard</button>`}<button class="btn" type="button" data-toast="${isNew?"Player saved as hidden":"Changes published"}">${isNew?"Save as hidden":"Publish changes"}</button></div></div>`;
+};
+
+let jFilter = "All";
+V.journal = ()=>{
+  const L = posts.filter(p=>jFilter==="All"||p.s===jFilter);
+  return `
+  <div class="ph"><div><h1>Journal</h1><p>News, signings and opinion pieces. Each article can have its own FR and NL version.</p></div>
+    <div class="acts"><button class="btn pri" data-go="post">Write an article</button></div></div>
+  <div class="tools"><div class="seg" id="jseg">${["All","Published","Scheduled","Draft"].map(g=>`<button type="button" aria-pressed="${g===jFilter}" data-f="${g}">${g}</button>`).join("")}</div></div>
+  <div class="panel tw"><table>
+    <thead><tr><th>Title</th><th>Category</th><th>Status</th><th>Date</th></tr></thead>
+    <tbody>${L.map((p,i)=>`<tr data-go="post"><td><div class="who"><span class="thumb photo" style="${tone(60+i)};width:60px;height:40px"></span><b>${p.t}</b></div></td><td>${p.k}</td><td>${pillFor(p.s)}</td><td>${p.d}</td></tr>`).join("")}</tbody>
+  </table></div>`;
+};
+
+V.post = ()=>`
+  <p class="crumb"><button type="button" data-go="journal">Journal</button> / Draft</p>
+  <div class="ph"><div><h1>Edit article</h1><p>Draft, saved automatically 2 minutes ago</p></div></div>
+  <div class="ed">
+    <div class="stack">
+      <div class="panel"><h3>Article <span class="langtabs">${["EN","FR","NL"].map((l,i)=>`<button type="button" aria-pressed="${i===0}">${l}${i?'<span class="miss" aria-label="missing"></span>':""}</button>`).join("")}</span></h3><div class="pbody stack">
+        <div class="f"><label for="p-t">Title</label><input id="p-t" value="January window: what we expect for Belgian under-21 players"></div>
+        <div class="f"><label for="p-x">Summary <span>Shown in lists and when shared</span></label><textarea id="p-x" style="min-height:70px">Clubs in the Pro League are under pressure to play young Belgians. Here is what that means for our under-21 players this winter.</textarea></div>
+        <div class="rte"><div class="tb" role="toolbar" aria-label="Formatting"><button type="button">H2</button><button type="button">B</button><button type="button"><i>I</i></button><button type="button">Quote</button><span class="sep"></span><button type="button">Link</button><button type="button">Image</button><button type="button">Video</button><button type="button">Player</button></div>
+          <div class="body" contenteditable="true" aria-label="Article text">
+            <p>Every January the same question comes back: should a young player move for minutes, or stay and fight for a place? This winter the answer looks different for Belgian under-21s.</p>
+            <h2>The homegrown rule</h2>
+            <p>Pro League clubs must keep a minimum number of homegrown players in their squad. That has made young Belgians more valuable on the market, and more expensive to loan out.</p>
+            <blockquote>A loan only makes sense if we know the coach will play him.</blockquote>
+            <p>For our players, that means fewer moves for the sake of moving and more conversations with the clubs about real playing time.</p>
+          </div></div>
+      </div></div>
+    </div>
+    <div class="stack preview">
+      <div class="panel"><h3>Publishing</h3><div class="pbody stack">
+        <div class="f"><label for="p-s">Status</label><select id="p-s"><option>Draft</option><option>Scheduled</option><option>Published</option></select></div>
+        <div class="f"><label for="p-d">Publish on</label><input id="p-d" type="datetime-local" value="2026-10-24T09:00"></div>
+        <div class="f"><label for="p-k">Category</label><select id="p-k"><option>Insight</option><option>Signing</option><option>Opinion</option><option>Agency</option><option>News</option></select></div>
+        <div class="f"><label>Players mentioned <span>Article also appears on their profile</span></label><div class="tags"><span class="tag">Noah Peeters <button type="button" aria-label="Remove">×</button></span><span class="tag">Samuel Kabongo <button type="button" aria-label="Remove">×</button></span><button class="btn" type="button" style="height:28px;padding:0 10px;font-size:13px">Add</button></div></div>
+      </div></div>
+      <div class="panel"><h3>Cover image</h3><div class="pbody"><div class="photo" style="${tone(62)};aspect-ratio:3/2;border-radius:2px"></div><p class="note" style="margin-top:8px">Also used when the article is shared on WhatsApp or LinkedIn.</p></div></div>
+      <div class="panel"><h3>Search engines</h3><div class="pbody stack">
+        <div class="f"><label for="p-seo">Page title</label><input id="p-seo" value="January window and Belgian U21 players | Numéro 10"></div>
+        <div class="f"><label for="p-url">Web address</label><input id="p-url" value="/journal/january-window-belgian-u21"></div>
+      </div></div>
+    </div>
+  </div>
+  <div class="savebar"><span>Draft</span><div style="display:flex;gap:8px"><button class="btn ghost" type="button" data-toast="Preview opened">Preview</button><button class="btn" type="button" data-toast="Article scheduled for 24 October, 09:00">Schedule</button></div></div>`;
+
+V.team = ()=>`
+  <div class="ph"><div><h1>Team</h1><p>The people shown in the Our team section.</p></div><div class="acts"><button class="btn pri" type="button" data-toast="New team member added">Add a person</button></div></div>
+  <div class="panel">${team.map(([n,r],i)=>`<div class="secrow"><span class="handle" aria-hidden="true">⋮⋮</span><span class="thumb photo" style="${tone(40+i)};width:44px;height:44px;border-radius:50%"></span><div class="grow"><b>${n}</b><small>${r}</small></div><span class="pill on">Published</span><button class="btn" type="button">Edit</button></div>`).join("")}</div>`;
+
+V.pages = ()=>`
+  <div class="ph"><div><h1>Pages</h1><p>Texts and images of the fixed sections. Turn a section off to hide it from the homepage.</p></div></div>
+  <div class="two">
+    <div class="panel"><h3>Homepage sections <small>Drag to reorder</small></h3>
+      ${[["Hero","Wall of names, intro text, two buttons"],["Our talents","List of published players"],["What we do","5 services"],["Our team","4 people"],["Journal","Latest 4 articles"],["Instagram","6 posts"],["Contact","Form and contact details"]].map(([t,s],i)=>`<div class="secrow"><span class="handle" aria-hidden="true">⋮⋮</span><div class="grow"><b>${t}</b><small>${s}</small></div><label class="tg"><input type="checkbox" checked aria-label="Show ${t}"><span class="sw"></span></label><button class="btn" type="button">Edit</button></div>`).join("")}
+    </div>
+    <div class="panel"><h3>Hero <span class="langtabs"><button type="button" aria-pressed="true">EN</button><button type="button">FR</button><button type="button">NL</button></span></h3><div class="pbody stack">
+      <div class="f"><label for="h-b">Intro, bold part</label><input id="h-b" value="Numéro 10 represents twenty professional footballers."></div>
+      <div class="f"><label for="h-l">Intro, rest</label><textarea id="h-l" style="min-height:80px">We negotiate their contracts, plan their careers and handle the legal, financial and commercial side.</textarea></div>
+      <div class="fgrid" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+        <div class="f"><label for="h-c1">First button</label><input id="h-c1" value="See every profile"></div>
+        <div class="f"><label for="h-c2">Second button</label><input id="h-c2" value="Contact the agency"></div>
+      </div>
+      <div class="f"><label>Numbers under the intro</label>
+        <div class="fgrid" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+          <input aria-label="Players represented" value="20 (counted automatically)" disabled><input aria-label="Nationalities" value="13 (counted automatically)" disabled>
+          <input aria-label="Leagues" value="5 (counted automatically)" disabled><input aria-label="FIFA licence" value="202X-0000">
+        </div></div>
+      <button class="btn pri" type="button" data-toast="Homepage updated" style="justify-self:start">Publish changes</button>
+    </div></div>
+  </div>`;
+
+let igState = Array.from({length:12},(_,i)=>({pin:i<2,hide:i===4}));
+V.instagram = ()=>`
+  <div class="ph"><div><h1>Instagram</h1><p>The latest posts appear on the website automatically. Pin a post to keep it first, or hide one you don't want shown.</p></div>
+    <div class="acts"><span class="pill on" style="height:38px;padding:0 14px">Connected as @numero10agency</span></div></div>
+  <div class="tools"><span class="note">Last synced 12 minutes ago. The website shows the first 6.</span><button class="btn" type="button" data-toast="Instagram synced">Sync now</button></div>
+  <div class="iggrid" id="iggrid">${igState.map((s,i)=>`<div class="igp ${s.hide?"hid":""}"><div class="photo" style="${tone(80+i)};position:absolute;inset:0"></div>${s.pin?'<span class="pill on st">Pinned</span>':s.hide?'<span class="pill dim st">Hidden</span>':""}<div class="ac"><button type="button" data-ig="pin" data-i="${i}" aria-pressed="${s.pin}">Pin</button><button type="button" data-ig="hide" data-i="${i}" aria-pressed="${s.hide}">Hide</button></div></div>`).join("")}</div>`;
+
+let iSel = 1, iFilter = "All";
+V.inbox = ()=>{
+  const L = msgs.filter(m=>iFilter==="All"||m.type===iFilter);
+  const m = msgs.find(x=>x.id===iSel) || L[0];
+  return `
+  <div class="ph"><div><h1>Messages</h1><p>Everything sent through the contact form. A copy also goes to contact@numero10.com.</p></div></div>
+  <div class="tools"><div class="seg" id="iseg">${["All","Club","Player","Family","Brand","Press"].map(g=>`<button type="button" aria-pressed="${g===iFilter}" data-f="${g}">${g}</button>`).join("")}</div></div>
+  <div class="inbox">
+    <div class="ilist">${L.map(x=>`<button type="button" data-m="${x.id}" aria-current="${x.id===(m&&m.id)}"><span class="u ${x.read?"read":""}"></span><b>${x.from}</b><time>${x.d}</time><span class="s">${x.type}: ${x.sub}</span></button>`).join("")}</div>
+    ${m?`<div class="idetail">
+      <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><span class="pill out">${m.type}</span><span class="note">${m.d}</span></div>
+      <h2>${m.sub}</h2>
+      <dl><div><dt>From</dt><dd>${m.from}</dd></div><div><dt>Organisation</dt><dd>${m.org}</dd></div><div><dt>Email</dt><dd>${m.email}</dd></div></dl>
+      <p class="msg">${esc(m.msg)}</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:auto"><button class="btn pri" type="button" data-toast="Reply opened in your email">Reply by email</button><button class="btn" type="button" data-toast="Marked as handled">Mark as handled</button><button class="btn ghost" type="button" data-toast="Moved to archive">Archive</button></div>
+    </div>`:`<div class="idetail"><p class="note">No messages of this type yet.</p></div>`}
+  </div>`;
+};
+
+V.settings = ()=>`
+  <div class="ph"><div><h1>Settings</h1><p>Agency details used across the website, your account and email notifications.</p></div></div>
+  <div class="two">
+    <div class="stack">
+      <div class="panel"><h3>Agency details</h3><div class="pbody fgrid" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+        <div class="f"><label for="s-e">Contact email</label><input id="s-e" value="contact@numero10.com"></div>
+        <div class="f"><label for="s-p">Phone</label><input id="s-p" value="+32 000 00 00 00"></div>
+        <div class="f"><label for="s-a">Office</label><input id="s-a" value="Brussels, Belgium"></div>
+        <div class="f"><label for="s-l">FIFA licence number</label><input id="s-l" value="202X-0000"></div>
+        <div class="f"><label for="s-ig">Instagram</label><input id="s-ig" value="@numero10agency"></div>
+        <div class="f"><label for="s-li">LinkedIn</label><input id="s-li" value="linkedin.com/company/numero10"></div>
+      </div></div>
+      <div class="panel"><h3>Languages</h3><div class="pbody rows-set">
+        <div class="r"><p>English<small>Main language. Used when a translation is missing.</small></p><span class="pill on">Main</span></div>
+        <div class="r"><p>French</p><label class="tg"><input type="checkbox" checked aria-label="French"><span class="sw"></span></label></div>
+        <div class="r"><p>Dutch</p><label class="tg"><input type="checkbox" checked aria-label="Dutch"><span class="sw"></span></label></div>
+        <div class="r"><p>Open the site in the visitor's browser language<small>Visitors can still switch with EN, FR, NL</small></p><label class="tg"><input type="checkbox" checked aria-label="Detect language"><span class="sw"></span></label></div>
+      </div></div>
+    </div>
+    <div class="stack">
+      <div class="panel"><h3>Your account</h3><ul class="list">
+        <li><span class="av">TL</span><div class="grow"><p>Thomas Lambert</p><p>thomas@numero10.com</p></div><span class="pill on">Admin</span></li>
+      </ul><div class="pbody" style="display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid var(--line)"><button class="btn" type="button" data-toast="Password reset link sent to thomas@numero10.com">Change password</button><button class="btn ghost" type="button" data-toast="Sign-in email updated">Change sign-in email</button></div></div>
+      <div class="panel"><h3>Email notifications</h3><div class="pbody rows-set">
+        <div class="r"><p>Send every new message by email<small>Messages also stay in Messages in this panel</small></p><label class="tg"><input type="checkbox" checked aria-label="Email every new message"><span class="sw"></span></label></div>
+        <div class="f"><label for="s-n">Send to</label><input id="s-n" value="contact@numero10.com"><p class="hint">Separate several addresses with a comma.</p></div>
+      </div></div>
+    </div>
+  </div>`;
+
+/* ---------- router ---------- */
+let current = "overview";
+function go(v, arg){
+  current = v;
+  const navKey = v==="talent"||v==="talent-new"?"talents":v==="post"?"journal":v;
+  document.querySelectorAll(".side nav a").forEach(a=>{ if(a.dataset.v===navKey) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
+  C.innerHTML = v==="talent-new" ? V.talent(null) : v==="talent" ? V.talent(arg) : V[v]();
+  document.getElementById("side").classList.remove("open");
+  window.scrollTo(0,0);
+  if(v==="talent"||v==="talent-new") wireEditor(arg);
+  try{ localStorage.setItem("n10-cms-view", v==="talent"?"talents":v==="talent-new"?"talents":v); }catch(e){}
+}
+function updateUnread(){ const n = msgs.filter(m=>!m.read).length; document.getElementById("navUnread").textContent = n? n+" new" : ""; }
+
+function wireEditor(i){
+  const name = C.querySelector("#e-name"), num = C.querySelector("#e-num"), club = C.querySelector("#e-club"), pos = C.querySelector("#e-pos");
+  const sync = ()=>{ C.querySelector("#pvName").textContent = name.value || "Player name"; C.querySelector("#pvNum").textContent = num.value || "–"; C.querySelector("#pvMeta").textContent = pos.value + (club.value?", "+club.value:""); };
+  [name,num,club,pos].forEach(el=>el.addEventListener("input",sync));
+  const bio = C.querySelector("#e-bio"), cnt = C.querySelector("#bioCount");
+  const sc = ()=> cnt.textContent = bio.value.length + " / 600"; bio.addEventListener("input",sc); sc();
+  C.querySelector("#langtabs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;edLang=b.dataset.l;go(i==null?"talent-new":"talent",i);});
+}
+
+document.addEventListener("click",e=>{
+  const nav = e.target.closest(".side nav a"); if(nav){ e.preventDefault(); go(nav.dataset.v); return; }
+  const t = e.target.closest("[data-toast]"); if(t) toast(t.dataset.toast);
+  const g = e.target.closest("[data-go]"); if(g){ go(g.dataset.go); return; }
+  const row = e.target.closest("tr[data-p]"); if(row){ edLang="EN"; go("talent", +row.dataset.p); return; }
+  const seg = e.target.closest(".seg button");
+  if(seg){ const id = seg.parentElement.id; if(id==="tseg"){tFilter=seg.dataset.f;go("talents");} if(id==="jseg"){jFilter=seg.dataset.f;go("journal");} if(id==="iseg"){iFilter=seg.dataset.f;const f=msgs.find(m=>iFilter==="All"||m.type===iFilter);if(f)iSel=f.id;go("inbox");} return; }
+  const om = e.target.closest("[data-open-m]"); if(om){ iSel=+om.dataset.openM; iFilter="All"; msgs.find(y=>y.id===iSel).read=true; updateUnread(); go("inbox"); return; }
+  const m = e.target.closest("[data-m]"); if(m){ iSel=+m.dataset.m; const x=msgs.find(y=>y.id===iSel); x.read=true; updateUnread(); go("inbox"); return; }
+  const ig = e.target.closest("[data-ig]"); if(ig){ const s=igState[+ig.dataset.i]; s[ig.dataset.ig]=!s[ig.dataset.ig]; if(ig.dataset.ig==="pin"&&s.pin) s.hide=false; if(ig.dataset.ig==="hide"&&s.hide) s.pin=false; go("instagram"); return; }
+  const lt = e.target.closest(".langtabs button"); if(lt && !lt.closest("#langtabs")){ lt.parentElement.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b===lt)); }
+});
+C.addEventListener("change",e=>{ if(e.target.matches(".tg input")) toast(e.target.checked?"Turned on":"Turned off"); });
+document.getElementById("menuBtn").addEventListener("click",()=>document.getElementById("side").classList.toggle("open"));
+document.getElementById("signOut").addEventListener("click",()=>{ document.getElementById("appView").hidden=true; document.getElementById("loginView").hidden=false; });
+document.getElementById("loginForm").addEventListener("submit",e=>{ e.preventDefault(); document.getElementById("loginView").hidden=true; document.getElementById("appView").hidden=false; go("overview"); });
+document.addEventListener("keydown",e=>{ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){ e.preventDefault(); document.getElementById("q").focus(); }});
+
+updateUnread();
+let start = "overview"; try{ start = localStorage.getItem("n10-cms-view") || "overview"; }catch(e){}
+if(!V[start]) start = "overview";
+const h = (location.hash||"").slice(1); if(V[h]) start = h;
+go(start);
+})();
+</script>

@@ -1,0 +1,618 @@
+<title>Numéro 10 Homepage</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500..900&family=Barlow:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: "Roster". Black page, the 20 surnames are the hero, every list (talents, journal) is a row that shows a photo on hover. One white band (contact) breaks the black. */
+:root{
+  --ink:#000000;
+  --paper:#ffffff;
+  --line:#2b2b2b;
+  --dim:#333333;
+  --mute:#8a8a8a;
+  --soft:#bdbdbd;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --text:"Barlow",ui-sans-serif,"Helvetica Neue",Arial,sans-serif;
+  --gl:max(16px,env(safe-area-inset-left,0px));
+  --gr:max(16px,env(safe-area-inset-right,0px));
+  --noise:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--paper);margin:0;font-family:var(--text);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+button{font:inherit;color:inherit}
+p,h1,h2,h3,h4,ul,dl,dd,figure{margin:0}
+ul{padding:0;list-style:none}
+img{display:block;max-width:100%}
+:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.pad{padding-left:var(--gl);padding-right:var(--gr)}
+.wrap{max-width:1400px;margin-inline:auto}
+.disp{font-family:var(--display);text-transform:uppercase;font-weight:800;line-height:.9;letter-spacing:-.005em}
+.sec{padding-block:clamp(72px,9vw,120px)}
+.sec-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px 40px;margin-bottom:32px}
+h2.disp{font-size:clamp(3rem,7vw,6.5rem)}
+.lede{color:var(--soft);max-width:44ch}
+.btn{display:inline-flex;align-items:center;height:52px;padding:0 26px;background:var(--paper);color:var(--ink);text-decoration:none;font-weight:600;font-size:15px;border:1.5px solid var(--paper);border-radius:2px;cursor:pointer;white-space:nowrap}
+.btn.ghost{background:none;color:var(--paper)}
+.btn.dark{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+/* placeholder photography: tonal block + grain, replaced by the real B/W shoots */
+.photo{position:relative;background-color:#555;background-image:var(--noise),linear-gradient(var(--ang,160deg),var(--t1,#cfcfcf),var(--t2,#5d5d5d));overflow:hidden;max-width:100%}
+.photo .note{position:absolute;left:10px;bottom:8px;font-size:11px;color:rgba(255,255,255,.7)}
+
+/* header */
+.head{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ink)}
+.head .row{display:flex;align-items:center;gap:28px;height:76px;border-bottom:1px solid var(--line)}
+.logo{height:28px;width:auto;filter:invert(1)}
+.head nav{margin-left:auto;display:flex;gap:26px;font-size:15px;font-weight:500}
+.head nav a{text-decoration:none;color:var(--soft)}
+.head nav a:hover{color:var(--paper)}
+.lang{display:flex;gap:2px}
+.lang button{background:none;border:0;padding:6px 7px;cursor:pointer;font-size:13px;font-weight:600;color:var(--mute)}
+.lang button[aria-pressed="true"]{color:var(--paper);text-decoration:underline;text-underline-offset:4px}
+.menu-btn{display:none;margin-left:auto;background:none;border:0;cursor:pointer;font-weight:600;padding:8px 0}
+.mnav{position:fixed;inset:0;z-index:40;background:var(--ink);padding:calc(env(safe-area-inset-top,0px) + 96px) var(--gr) 40px var(--gl);display:flex;flex-direction:column;gap:4px}
+.mnav a{font-family:var(--display);text-transform:uppercase;font-weight:800;font-size:3rem;line-height:1.05;text-decoration:none}
+.mnav .close{position:absolute;top:calc(env(safe-area-inset-top,0px) + 22px);right:var(--gr);background:none;border:0;cursor:pointer;font-weight:600}
+.mnav .lang{margin-top:32px}
+
+/* hero: the roster wall */
+.wall{position:relative;padding-block:44px 0}
+.names{font-family:var(--display);text-transform:uppercase;font-weight:900;font-size:clamp(3rem,9.2vw,9.5rem);line-height:.84;color:var(--dim);display:flex;flex-wrap:wrap;gap:0 .22em}
+.names button{background:none;border:0;padding:0;cursor:pointer;font:inherit;color:inherit;text-transform:inherit;letter-spacing:inherit;transition:color .15s}
+.names sup{font-size:.22em;vertical-align:top;margin-left:.08em;position:relative;top:.55em;font-weight:600}
+.names button.on,.names button:hover,.names button:focus-visible{color:var(--paper)}
+.wall .float{position:absolute;width:clamp(180px,22vw,320px);aspect-ratio:3/4;pointer-events:none;z-index:2;box-shadow:0 20px 60px rgba(0,0,0,.6);transition:left .25s ease,top .25s ease}
+.wall .float .cap{position:absolute;left:0;right:0;bottom:0;padding:10px 12px;font-size:13px;font-weight:600;background:linear-gradient(transparent,rgba(0,0,0,.7))}
+.intro{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end;padding-top:36px;border-top:1px solid var(--line);margin-top:44px}
+.intro p{font-size:19px;max-width:48ch;color:#cfcfcf}
+.intro p b{color:var(--paper);font-weight:600}
+.intro .ctas{display:flex;gap:10px;flex-wrap:wrap}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:56px;border-top:1px solid var(--line)}
+.facts div{padding:18px 16px 0 0}
+.facts dt{font-size:13px;color:var(--mute)}
+.facts dd{font-family:var(--display);font-weight:800;font-size:2.25rem;line-height:1.1;font-variant-numeric:tabular-nums}
+
+/* talents */
+.controls{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;align-items:center;margin-bottom:24px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips button{background:none;border:1px solid var(--line);color:var(--soft);padding:8px 14px;cursor:pointer;font-size:14px;border-radius:2px}
+.chips button span{color:var(--mute);margin-left:6px;font-variant-numeric:tabular-nums}
+.chips button[aria-pressed="true"]{background:var(--paper);color:var(--ink);border-color:var(--paper)}
+.chips button[aria-pressed="true"] span{color:#666}
+.views{display:flex;gap:2px;font-size:14px}
+.views button{background:none;border:0;padding:6px 8px;cursor:pointer;color:var(--mute)}
+.views button[aria-pressed="true"]{color:var(--paper);text-decoration:underline;text-underline-offset:5px}
+.rows{border-top:1px solid var(--line)}
+.rowp{display:grid;grid-template-columns:72px minmax(0,1fr) minmax(0,.7fr) minmax(0,.8fr) minmax(0,.4fr) 48px;gap:16px;align-items:center;padding-block:14px;border-bottom:1px solid var(--line);cursor:pointer}
+.rowp .no{font-family:var(--display);font-weight:800;font-size:28px;color:var(--mute);font-variant-numeric:tabular-nums}
+.rowp .nm{font-family:var(--display);text-transform:uppercase;font-weight:800;font-size:clamp(1.75rem,3.6vw,3rem);line-height:1}
+.rowp .c{color:var(--soft);font-size:15px}
+.rowp .r{text-align:right;color:var(--soft);font-variant-numeric:tabular-nums}
+.rowp .thumb{display:none}
+.rowp:hover .nm,.rowp:focus-visible .nm{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px}
+.rowp:hover .no{color:var(--paper)}
+.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:28px 12px}
+.card{display:block;background:none;border:0;padding:0;text-align:left;cursor:pointer;min-width:0}
+.card .photo{aspect-ratio:3/4}
+.card .n{position:absolute;left:10px;top:4px;font-family:var(--display);font-weight:900;font-size:3rem;line-height:1}
+.card .nm{margin-top:10px;font-family:var(--display);text-transform:uppercase;font-weight:800;font-size:1.5rem;line-height:1}
+.card .mt{font-size:13px;color:var(--mute);margin-top:4px}
+.card:hover .nm{text-decoration:underline;text-underline-offset:4px}
+.hover-photo{position:fixed;z-index:30;width:220px;aspect-ratio:3/4;pointer-events:none;box-shadow:0 20px 60px rgba(0,0,0,.6);opacity:0;transition:opacity .15s}
+.hover-photo.show{opacity:1}
+
+/* services */
+.svc{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.svc li{background:var(--ink);padding:28px 22px 32px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.svc h3{font-family:var(--display);text-transform:uppercase;font-weight:800;font-size:30px;line-height:.95}
+.svc p{color:#aaa;font-size:15px}
+
+/* team */
+.team{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 12px}
+.person .photo{aspect-ratio:1}
+.person h3{margin-top:12px;font-family:var(--display);text-transform:uppercase;font-weight:800;font-size:1.75rem;line-height:1}
+.person .role{color:var(--soft);font-size:15px;margin-top:4px}
+.person .langs{color:var(--mute);font-size:13px;margin-top:6px}
+
+/* journal */
+.jrows{border-top:1px solid var(--line)}
+.jrow{display:grid;grid-template-columns:160px 120px minmax(0,1fr);gap:20px;align-items:baseline;padding-block:22px;border-bottom:1px solid var(--line);text-decoration:none}
+.jrow .d{color:var(--mute);font-size:14px;font-variant-numeric:tabular-nums}
+.jrow .k{color:var(--soft);font-size:14px}
+.jrow h3{font-family:var(--display);text-transform:uppercase;font-weight:800;font-size:clamp(1.6rem,3vw,2.5rem);line-height:1}
+.jrow:hover h3{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:6px}
+
+/* instagram */
+.ig{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.ig a{position:relative;aspect-ratio:1;display:block;max-width:100%}
+.ig a .photo{position:absolute;inset:0}
+.ig span{position:absolute;left:0;right:0;bottom:0;padding:10px;font-size:12px;line-height:1.3;background:linear-gradient(transparent,rgba(0,0,0,.75));opacity:0;transition:opacity .2s}
+.ig a:hover span,.ig a:focus-visible span{opacity:1}
+.handle{font-family:var(--display);font-weight:800;font-size:2rem;text-transform:none}
+
+/* contact: the one white band */
+.contact-band{background:var(--paper);color:var(--ink)}
+.contact{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,6vw,96px)}
+.contact .lede{color:#555}
+.lines{margin-top:32px;display:grid;gap:18px}
+.lines dt{font-size:13px;color:#777}
+.lines dd{font-size:20px;font-weight:600;user-select:all}
+form{display:grid;gap:22px}
+fieldset{border:0;margin:0;padding:0}
+legend{font-size:13px;color:#777;margin-bottom:10px}
+.who{display:flex;flex-wrap:wrap;gap:6px}
+.who label{position:relative}
+.who input{position:absolute;opacity:0;inset:0;cursor:pointer;margin:0}
+.who span{display:block;border:1.5px solid var(--ink);border-radius:2px;padding:9px 16px;font-size:15px;font-weight:500}
+.who input:checked + span{background:var(--ink);color:var(--paper)}
+.who input:focus-visible + span{outline:2px solid var(--ink);outline-offset:3px}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 20px}
+.field{display:grid;gap:6px;min-width:0}
+.field.full{grid-column:1/-1}
+.field label{font-size:13px;color:#777}
+.field input,.field textarea,.field select{font:inherit;font-size:16px;border:0;border-bottom:1.5px solid var(--ink);background:transparent;padding:8px 0;border-radius:0;width:100%;color:var(--ink)}
+.field select{color-scheme:light}
+.field textarea{min-height:110px;resize:vertical}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-bottom-width:3px}
+.form-foot{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+.form-foot small{color:#777;max-width:44ch;font-size:13px}
+.sent{padding:18px 20px;background:var(--ink);color:var(--paper);font-weight:600}
+
+/* footer */
+.foot{padding-block:72px 48px}
+.foot .big{font-size:clamp(4rem,14vw,13rem);line-height:.8;font-weight:900}
+.foot .cols{margin-top:56px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;font-size:15px}
+.foot h4{font-size:13px;font-weight:500;color:var(--mute);margin-bottom:10px}
+.foot .cols a{display:block;text-decoration:none;padding-block:3px;color:var(--soft)}
+.foot .cols a:hover{color:var(--paper)}
+.foot .legal{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:13px;color:var(--mute)}
+
+/* profile */
+dialog.profile{border:0;padding:0;max-width:none;max-height:none;width:100%;height:100%;background:var(--ink);color:var(--paper)}
+dialog.profile::backdrop{background:rgba(0,0,0,.7)}
+.pf{min-height:100%;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+.pf .photo{min-height:60vh}
+.pf .photo .n{position:absolute;left:20px;top:10px;font-family:var(--display);font-weight:900;font-size:clamp(7rem,14vw,13rem);line-height:1}
+.pf .info{padding:calc(env(safe-area-inset-top,0px) + 96px) var(--gr) 48px clamp(24px,5vw,72px);display:flex;flex-direction:column;gap:28px}
+.pf h2{font-size:clamp(3.5rem,8vw,7.5rem);font-family:var(--display);text-transform:uppercase;font-weight:900;line-height:.85}
+.pf .pos{color:var(--soft);font-size:19px;margin-top:12px}
+.pf dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 16px;border-top:1px solid var(--line);padding-top:24px}
+.pf dt{font-size:13px;color:var(--mute)}
+.pf dd{font-weight:600;font-variant-numeric:tabular-nums}
+.pf .bio{color:#cfcfcf;max-width:56ch}
+.pf .links{display:flex;flex-wrap:wrap;gap:10px}
+.pf .x{position:fixed;top:calc(env(safe-area-inset-top,0px) + 18px);right:calc(var(--gr) + 4px);z-index:2}
+
+@media (max-width:1100px){
+  .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .svc{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ig{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .rowp{grid-template-columns:56px minmax(0,1fr) minmax(0,.8fr) minmax(0,.3fr) 40px}
+  .rowp .pos{display:none}
+}
+@media (max-width:820px){
+  .head nav,.head .lang{display:none}
+  .menu-btn{display:block}
+  .wall .float{display:none}
+  .intro,.contact,.pf{grid-template-columns:minmax(0,1fr)}
+  .facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .rowp{grid-template-columns:44px minmax(0,1fr) 60px}
+  .rowp .c,.rowp .r{display:none}
+  .rowp .thumb{display:block;width:60px;aspect-ratio:3/4}
+  .grid,.team{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .jrow{grid-template-columns:minmax(0,1fr);gap:4px}
+  .foot .cols{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pf .photo{min-height:50vh}
+  .pf .info{padding-top:32px}
+  .pf dl{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:560px){
+  .svc,.fields{grid-template-columns:minmax(0,1fr)}
+  .intro .ctas .btn{flex:1;justify-content:center}
+}
+@media (hover:none){.hover-photo{display:none}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.names button,.wall .float{transition:none}}
+</style>
+
+<header class="head pad">
+  <div class="wrap row">
+    <a href="#top" aria-label="Numéro 10, home"><img class="logo" src="n10-logo.png" alt="Numéro 10"></a>
+    <nav aria-label="Main">
+      <a href="#talents" data-i18n="nav.talents">Our talents</a>
+      <a href="#services" data-i18n="nav.services">What we do</a>
+      <a href="#team" data-i18n="nav.team">Our team</a>
+      <a href="#journal" data-i18n="nav.journal">Journal</a>
+      <a href="#contact" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en">EN</button><button type="button" data-lang="fr">FR</button><button type="button" data-lang="nl">NL</button></div>
+    <button class="menu-btn" type="button" id="menuOpen" data-i18n="nav.menu">Menu</button>
+  </div>
+</header>
+
+<div class="mnav" id="mnav" hidden>
+  <button class="close" type="button" id="menuClose" data-i18n="nav.close">Close</button>
+  <a href="#talents" data-i18n="nav.talents">Our talents</a>
+  <a href="#services" data-i18n="nav.services">What we do</a>
+  <a href="#team" data-i18n="nav.team">Our team</a>
+  <a href="#journal" data-i18n="nav.journal">Journal</a>
+  <a href="#contact" data-i18n="nav.contact">Contact</a>
+  <div class="lang" role="group" aria-label="Language"><button type="button" data-lang="en">EN</button><button type="button" data-lang="fr">FR</button><button type="button" data-lang="nl">NL</button></div>
+</div>
+
+<main id="top">
+
+<section class="pad"><div class="wrap wall" id="wall">
+  <h1 class="names" id="names" aria-label="Numéro 10 players"></h1>
+  <div class="photo float" id="float"><span class="cap" id="floatCap"></span></div>
+  <div class="intro">
+    <p><b data-i18n="hero.b">Numéro 10 represents twenty professional footballers.</b> <span data-i18n="hero.lede">We negotiate their contracts, plan their careers and handle the legal, financial and commercial side.</span></p>
+    <div class="ctas"><a class="btn" href="#talents" data-i18n="hero.cta1">See every profile</a><a class="btn ghost" href="#contact" data-i18n="hero.cta2">Contact the agency</a></div>
+  </div>
+  <dl class="facts">
+    <div><dt data-i18n="facts.players">Players represented</dt><dd>20</dd></div>
+    <div><dt data-i18n="facts.nat">Nationalities</dt><dd>13</dd></div>
+    <div><dt data-i18n="facts.leagues">Leagues</dt><dd>5</dd></div>
+    <div><dt data-i18n="facts.licence">FIFA licence</dt><dd>202X-0000</dd></div>
+  </dl>
+</div></section>
+
+<section class="pad sec" id="talents"><div class="wrap">
+  <div class="sec-top"><h2 class="disp" data-i18n="talents.title">Our talents</h2><p class="lede" data-i18n="talents.lede">Every player has a profile with current club, contract and a link to Transfermarkt.</p></div>
+  <div class="controls">
+    <div class="chips" role="group" aria-label="Filter by position" id="chips"></div>
+    <div class="views" role="group" aria-label="View">
+      <button type="button" data-view="rows" aria-pressed="true" data-i18n="talents.list">List</button>
+      <button type="button" data-view="grid" aria-pressed="false" data-i18n="talents.grid">Photos</button>
+    </div>
+  </div>
+  <div class="rows" id="rows"></div>
+  <div class="grid" id="grid" hidden></div>
+</div></section>
+
+<section class="pad sec" id="services" style="padding-top:0"><div class="wrap">
+  <div class="sec-top"><h2 class="disp" data-i18n="services.title">What we do</h2><p class="lede" data-i18n="services.lede">One agent is responsible for each player. Lawyers, financial advisers and communication specialists join when the player needs them.</p></div>
+  <ul class="svc">
+    <li><h3 data-i18n="s1.t">Sports representation</h3><p data-i18n="s1.d">Transfers, loans and contract renewals, negotiated with clubs. We are present for every conversation about the player's future.</p></li>
+    <li><h3 data-i18n="s2.t">Career strategy</h3><p data-i18n="s2.d">A plan for the next three seasons, reviewed before every window: playing time, league level, coach and style of play.</p></li>
+    <li><h3 data-i18n="s3.t">Legal and financial support</h3><p data-i18n="s3.d">Contract review, tax questions and long-term planning with lawyers and advisers we trust.</p></li>
+    <li><h3 data-i18n="s4.t">Image and communication</h3><p data-i18n="s4.d">Media training, social channels and press requests, handled so the player can focus on football.</p></li>
+    <li><h3 data-i18n="s5.t">Commercial partnerships</h3><p data-i18n="s5.d">Boot deals, brand partnerships and appearances that suit the player and the season.</p></li>
+  </ul>
+</div></section>
+
+<section class="pad sec" id="team" style="padding-top:0"><div class="wrap">
+  <div class="sec-top"><h2 class="disp" data-i18n="team.title">Our team</h2><p class="lede" data-i18n="team.lede">A small team, so every player and family knows who to call.</p></div>
+  <div class="team" id="teamGrid"></div>
+</div></section>
+
+<section class="pad sec" id="journal" style="padding-top:0"><div class="wrap">
+  <div class="sec-top"><h2 class="disp" data-i18n="journal.title">Journal</h2><a class="btn ghost" href="#journal" data-i18n="journal.all">All articles</a></div>
+  <div class="jrows" id="jrows"></div>
+</div></section>
+
+<section class="pad sec" id="instagram" style="padding-top:0"><div class="wrap">
+  <div class="sec-top"><div><h2 class="disp" data-i18n="ig.title">On Instagram</h2><p class="handle" style="margin-top:10px">@numero10agency</p></div><a class="btn ghost" href="https://www.instagram.com/" target="_blank" rel="noopener" data-i18n="ig.follow">Follow us</a></div>
+  <div class="ig" id="ig"></div>
+</div></section>
+
+<section class="pad sec contact-band" id="contact"><div class="wrap contact">
+  <div>
+    <h2 class="disp" data-i18n="contact.title">Contact</h2>
+    <p class="lede" style="margin-top:24px" data-i18n="contact.lede">Players, families, clubs and brands can write to us here. We answer within two working days.</p>
+    <dl class="lines">
+      <div><dt>Email</dt><dd>contact@numero10.com</dd></div>
+      <div><dt data-i18n="contact.phone">Phone</dt><dd>+32 000 00 00 00</dd></div>
+      <div><dt data-i18n="contact.office">Office</dt><dd>Brussels, Belgium</dd></div>
+    </dl>
+  </div>
+  <form id="form" novalidate>
+    <fieldset>
+      <legend data-i18n="form.who">I am</legend>
+      <div class="who" id="who">
+        <label><input type="radio" name="who" id="who-player" value="player" checked><span data-i18n="who.player">A player</span></label>
+        <label><input type="radio" name="who" id="who-family" value="family"><span data-i18n="who.family">Family of a player</span></label>
+        <label><input type="radio" name="who" id="who-club" value="club"><span data-i18n="who.club">A club</span></label>
+        <label><input type="radio" name="who" id="who-brand" value="brand"><span data-i18n="who.brand">A brand</span></label>
+        <label><input type="radio" name="who" id="who-partner" value="partner"><span data-i18n="who.partner">Another partner</span></label>
+      </div>
+    </fieldset>
+    <div class="fields">
+      <div class="field"><label for="f-name" data-i18n="form.name">Full name</label><input id="f-name" required autocomplete="name"></div>
+      <div class="field"><label for="f-email">Email</label><input id="f-email" type="email" required autocomplete="email"></div>
+      <div class="field" data-for="player family"><label for="f-pos" data-i18n="form.pos">Position</label><select id="f-pos"><option data-i18n="pos1.GK">Goalkeeper</option><option data-i18n="pos1.DEF">Defender</option><option data-i18n="pos1.MID">Midfielder</option><option data-i18n="pos1.FWD">Forward</option></select></div>
+      <div class="field" data-for="player family"><label for="f-club" data-i18n="form.curclub">Current club</label><input id="f-club"></div>
+      <div class="field" data-for="club" hidden><label for="f-org" data-i18n="form.club">Club</label><input id="f-org"></div>
+      <div class="field" data-for="club" hidden><label for="f-role" data-i18n="form.role">Your role</label><input id="f-role"></div>
+      <div class="field" data-for="brand partner" hidden><label for="f-co" data-i18n="form.company">Company</label><input id="f-co"></div>
+      <div class="field" data-for="brand partner" hidden><label for="f-web" data-i18n="form.web">Website</label><input id="f-web" type="url"></div>
+      <div class="field full"><label for="f-msg" data-i18n="form.msg">Message</label><textarea id="f-msg" required></textarea></div>
+    </div>
+    <div class="form-foot">
+      <small data-i18n="form.privacy">We use your details only to answer this message. See our privacy policy.</small>
+      <button class="btn dark" type="submit" data-i18n="form.send">Send message</button>
+    </div>
+    <p class="sent" id="sent" hidden data-i18n="form.sent">Message sent. We will reply within two working days.</p>
+  </form>
+</div></section>
+
+</main>
+
+<footer class="pad foot"><div class="wrap">
+  <p class="disp big" data-i18n="foot.big">Talk to us</p>
+  <div class="cols">
+    <div><h4 data-i18n="foot.agency">Agency</h4><a href="#talents" data-i18n="nav.talents">Our talents</a><a href="#services" data-i18n="nav.services">What we do</a><a href="#team" data-i18n="nav.team">Our team</a><a href="#journal" data-i18n="nav.journal">Journal</a></div>
+    <div><h4 data-i18n="foot.follow">Follow</h4><a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a><a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a><a href="https://www.transfermarkt.com/" target="_blank" rel="noopener">Transfermarkt</a></div>
+    <div><h4 data-i18n="foot.contact">Contact</h4><p style="color:var(--soft)">contact@numero10.com<br>Brussels, Belgium</p></div>
+    <div><h4 data-i18n="foot.licence">Licence</h4><p style="color:var(--soft)" data-i18n="foot.licencetext">FIFA football agent, licence no. 202X-0000</p><img class="logo" src="n10-logo.png" alt="" style="margin-top:20px;height:36px"></div>
+  </div>
+  <div class="legal">
+    <span>© 2026 Numéro 10</span>
+    <span data-i18n="foot.note">Design proposal. Players, photos and figures are placeholders.</span>
+    <a href="#contact" data-i18n="foot.privacy">Privacy policy</a>
+  </div>
+</div></footer>
+
+<div class="photo hover-photo" id="hoverPhoto" aria-hidden="true"></div>
+
+<dialog class="profile" id="profile" aria-labelledby="pfName">
+  <button class="btn x" type="button" id="pfClose" data-i18n="nav.close">Close</button>
+  <div class="pf">
+    <div class="photo" id="pfPhoto"><span class="n" id="pfNum"></span></div>
+    <div class="info">
+      <div><h2 id="pfName"></h2><p class="pos" id="pfPos"></p></div>
+      <dl id="pfFacts"></dl>
+      <p class="bio" id="pfBio"></p>
+      <div class="links">
+        <a class="btn" href="https://www.transfermarkt.com/" target="_blank" rel="noopener" data-i18n="pf.tm">Transfermarkt profile</a>
+        <a class="btn ghost" href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
+        <a class="btn ghost" href="#contact" id="pfAsk" data-i18n="pf.ask">Ask about this player</a>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(function(){
+const TODAY = new Date();
+const players = [
+  {n:1, name:"Arno Verbeke",g:"GK",pos:"Goalkeeper",nat:"BEL",born:"2002-03-11",club:"KAA Gent",lg:"Jupiler Pro League",foot:"Right",h:193,until:2028},
+  {n:30,name:"Moussa Ndiaye",g:"GK",pos:"Goalkeeper",nat:"SEN",born:"2005-07-02",club:"RWD Molenbeek",lg:"Challenger Pro League",foot:"Right",h:190,until:2027},
+  {n:2, name:"Jens Van Acker",g:"DEF",pos:"Right back",nat:"BEL",born:"2003-01-24",club:"Club Brugge",lg:"Jupiler Pro League",foot:"Right",h:179,until:2029},
+  {n:4, name:"Ibrahim Touré",g:"DEF",pos:"Centre back",nat:"CIV",born:"1999-09-30",club:"Standard Liège",lg:"Jupiler Pro League",foot:"Right",h:188,until:2027},
+  {n:5, name:"Mathis Lefèvre",g:"DEF",pos:"Centre back",nat:"FRA",born:"2001-05-16",club:"RC Lens",lg:"Ligue 1",foot:"Left",h:186,until:2028},
+  {n:3, name:"Noah Peeters",g:"DEF",pos:"Left back",nat:"BEL",born:"2006-02-08",club:"KRC Genk",lg:"Jupiler Pro League",foot:"Left",h:177,until:2028},
+  {n:22,name:"Kofi Mensah",g:"DEF",pos:"Right back",nat:"GHA",born:"2004-11-19",club:"FC Utrecht",lg:"Eredivisie",foot:"Right",h:180,until:2027},
+  {n:15,name:"Daan de Wit",g:"DEF",pos:"Centre back",nat:"NED",born:"2000-06-03",club:"Sparta Rotterdam",lg:"Eredivisie",foot:"Left",h:191,until:2027},
+  {n:6, name:"Yassine El Amrani",g:"MID",pos:"Defensive midfielder",nat:"MAR",born:"2002-08-27",club:"Royal Antwerp FC",lg:"Jupiler Pro League",foot:"Right",h:182,until:2028},
+  {n:8, name:"Rafael Couto",g:"MID",pos:"Central midfielder",nat:"POR",born:"2001-04-12",club:"Vitória SC",lg:"Liga Portugal",foot:"Right",h:176,until:2027},
+  {n:10,name:"Ilyas Benali",g:"MID",pos:"Attacking midfielder",nat:"BEL",born:"2004-05-09",club:"KRC Genk",lg:"Jupiler Pro League",foot:"Left",h:174,until:2029},
+  {n:14,name:"Teo Marchetti",g:"MID",pos:"Central midfielder",nat:"ITA",born:"2003-10-01",club:"KV Mechelen",lg:"Jupiler Pro League",foot:"Right",h:178,until:2027},
+  {n:18,name:"Samuel Kabongo",g:"MID",pos:"Central midfielder",nat:"COD",born:"2009-01-14",club:"RSC Anderlecht U18",lg:"Youth",foot:"Right",h:175,until:2027},
+  {n:23,name:"Lars Jacobs",g:"MID",pos:"Defensive midfielder",nat:"BEL",born:"1997-12-22",club:"OH Leuven",lg:"Jupiler Pro League",foot:"Right",h:184,until:2027},
+  {n:7, name:"Amadou Sow",g:"FWD",pos:"Right winger",nat:"SEN",born:"2003-03-29",club:"Stade de Reims",lg:"Ligue 2",foot:"Left",h:177,until:2028},
+  {n:9, name:"Jonas Claes",g:"FWD",pos:"Striker",nat:"BEL",born:"2000-07-07",club:"Union Saint-Gilloise",lg:"Jupiler Pro League",foot:"Right",h:187,until:2028},
+  {n:11,name:"Bilal Haddadi",g:"FWD",pos:"Left winger",nat:"MAR",born:"2005-09-18",club:"Cercle Brugge",lg:"Jupiler Pro League",foot:"Right",h:172,until:2029},
+  {n:17,name:"Nathan Mbemba",g:"FWD",pos:"Striker",nat:"CMR",born:"2002-02-25",club:"SV Zulte Waregem",lg:"Jupiler Pro League",foot:"Right",h:185,until:2027},
+  {n:19,name:"Emil Sørensen",g:"FWD",pos:"Striker",nat:"DEN",born:"2001-11-05",club:"AGF Aarhus",lg:"Superliga",foot:"Left",h:189,until:2027},
+  {n:21,name:"Leandro Pires",g:"FWD",pos:"Right winger",nat:"BRA",born:"2006-04-30",club:"KVC Westerlo",lg:"Jupiler Pro League",foot:"Left",h:173,until:2028}
+];
+players.forEach((p,i)=>p.i=i);
+const team = [
+  {name:"Thomas Lambert",role:{en:"Founder, FIFA football agent",fr:"Fondateur, agent FIFA",nl:"Oprichter, FIFA-voetbalagent"},langs:"FR, NL, EN"},
+  {name:"Sarah Vermeulen",role:{en:"Legal and contracts",fr:"Juridique et contrats",nl:"Juridisch en contracten"},langs:"NL, FR, EN"},
+  {name:"Karim Bensaïd",role:{en:"Scouting and player relations",fr:"Scouting et relations joueurs",nl:"Scouting en spelersrelaties"},langs:"FR, AR, EN"},
+  {name:"Lotte Janssens",role:{en:"Communication and partnerships",fr:"Communication et partenariats",nl:"Communicatie en partnerships"},langs:"NL, EN, DE"}
+];
+const posts = [
+  {d:"2026-10-14",k:"signing",t:"Ilyas Benali extends with KRC Genk until 2029"},
+  {d:"2026-10-02",k:"insight",t:"What clubs look at before signing a 19-year-old"},
+  {d:"2026-09-21",k:"agency",t:"Why we sign fewer players than we are offered"},
+  {d:"2026-09-03",k:"signing",t:"Amadou Sow completes his move to Stade de Reims"}
+];
+const igCaptions = ["Matchday in Genk","Contract signed","Training, Brugge","Under-21 call-up","Behind the scenes","First goal of the season"];
+
+/* i18n: English is read from the page; FR and NL below. Long articles stay per language in the CMS. */
+const T = {en:{},
+fr:{"nav.talents":"Nos talents","nav.services":"Nos services","nav.team":"L'équipe","nav.journal":"Journal","nav.contact":"Contact","nav.menu":"Menu","nav.close":"Fermer",
+"hero.b":"Numéro 10 représente vingt footballeurs professionnels.","hero.lede":"Nous négocions leurs contrats, planifions leur carrière et gérons les aspects juridiques, financiers et commerciaux.","hero.cta1":"Voir tous les profils","hero.cta2":"Contacter l'agence",
+"facts.players":"Joueurs représentés","facts.nat":"Nationalités","facts.leagues":"Championnats","facts.licence":"Licence FIFA",
+"talents.title":"Nos talents","talents.lede":"Chaque joueur a son profil : club actuel, contrat et lien vers Transfermarkt.","talents.list":"Liste","talents.grid":"Photos","talents.all":"Tous",
+"services.title":"Nos services","services.lede":"Chaque joueur a un agent responsable. Avocats, conseillers financiers et spécialistes de la communication interviennent quand le joueur en a besoin.",
+"s1.t":"Représentation sportive","s1.d":"Transferts, prêts et prolongations, négociés avec les clubs. Nous sommes présents à chaque discussion sur l'avenir du joueur.",
+"s2.t":"Stratégie de carrière","s2.d":"Un plan pour les trois prochaines saisons, revu avant chaque mercato : temps de jeu, niveau du championnat, entraîneur et style de jeu.",
+"s3.t":"Juridique et financier","s3.d":"Relecture des contrats, fiscalité et planification à long terme, avec des avocats et conseillers de confiance.",
+"s4.t":"Image et communication","s4.d":"Media training, réseaux sociaux et demandes de presse, pour que le joueur reste concentré sur le football.",
+"s5.t":"Partenariats commerciaux","s5.d":"Équipementiers, partenariats de marque et apparitions adaptés au joueur et à la saison.",
+"team.title":"L'équipe","team.lede":"Une petite équipe, pour que chaque joueur et chaque famille sache qui appeler.","team.speaks":"Parle",
+"journal.title":"Journal","journal.all":"Tous les articles","k.signing":"Signature","k.insight":"Analyse","k.agency":"Agence",
+"ig.title":"Sur Instagram","ig.follow":"Nous suivre",
+"contact.title":"Contact","contact.lede":"Joueurs, familles, clubs et marques peuvent nous écrire ici. Nous répondons sous deux jours ouvrables.","contact.phone":"Téléphone","contact.office":"Bureau",
+"form.who":"Je suis","who.player":"Joueur","who.family":"Famille d'un joueur","who.club":"Un club","who.brand":"Une marque","who.partner":"Autre partenaire",
+"form.name":"Nom complet","form.pos":"Poste","form.curclub":"Club actuel","form.club":"Club","form.role":"Votre fonction","form.company":"Entreprise","form.web":"Site web","form.msg":"Message",
+"form.privacy":"Vos données servent uniquement à répondre à ce message. Voir notre politique de confidentialité.","form.send":"Envoyer le message","form.sent":"Message envoyé. Nous répondons sous deux jours ouvrables.",
+"pos1.GK":"Gardien","pos1.DEF":"Défenseur","pos1.MID":"Milieu","pos1.FWD":"Attaquant","pos.GK":"Gardiens","pos.DEF":"Défenseurs","pos.MID":"Milieux","pos.FWD":"Attaquants",
+"foot.big":"Parlons-en","foot.agency":"Agence","foot.follow":"Suivre","foot.contact":"Contact","foot.licence":"Licence","foot.licencetext":"Agent de football FIFA, licence n° 202X-0000","foot.note":"Proposition de design. Joueurs, photos et chiffres fictifs.","foot.privacy":"Politique de confidentialité",
+"pf.tm":"Profil Transfermarkt","pf.ask":"Se renseigner sur ce joueur","pf.born":"Né le","pf.age":"Âge","pf.nat":"Nationalité","pf.club":"Club","pf.league":"Championnat","pf.foot":"Pied fort","pf.height":"Taille","pf.until":"Contrat jusqu'au","pf.number":"Numéro"},
+nl:{"nav.talents":"Onze talenten","nav.services":"Wat we doen","nav.team":"Ons team","nav.journal":"Journal","nav.contact":"Contact","nav.menu":"Menu","nav.close":"Sluiten",
+"hero.b":"Numéro 10 vertegenwoordigt twintig profvoetballers.","hero.lede":"We onderhandelen hun contracten, plannen hun carrière en regelen de juridische, financiële en commerciële kant.","hero.cta1":"Bekijk alle profielen","hero.cta2":"Neem contact op",
+"facts.players":"Vertegenwoordigde spelers","facts.nat":"Nationaliteiten","facts.leagues":"Competities","facts.licence":"FIFA-licentie",
+"talents.title":"Onze talenten","talents.lede":"Elke speler heeft een profiel met huidige club, contract en een link naar Transfermarkt.","talents.list":"Lijst","talents.grid":"Foto's","talents.all":"Alle",
+"services.title":"Wat we doen","services.lede":"Elke speler heeft één verantwoordelijke agent. Advocaten, financieel adviseurs en communicatiespecialisten komen erbij wanneer de speler ze nodig heeft.",
+"s1.t":"Sportieve vertegenwoordiging","s1.d":"Transfers, uitleningen en contractverlengingen, onderhandeld met clubs. We zitten mee aan tafel bij elk gesprek over de toekomst van de speler.",
+"s2.t":"Carrièrestrategie","s2.d":"Een plan voor de komende drie seizoenen, herzien voor elke transferperiode: speelminuten, niveau, trainer en speelstijl.",
+"s3.t":"Juridisch en financieel","s3.d":"Contractcontrole, fiscale vragen en planning op lange termijn, met advocaten en adviseurs die we vertrouwen.",
+"s4.t":"Imago en communicatie","s4.d":"Mediatraining, sociale media en persaanvragen, zodat de speler zich op voetbal kan focussen.",
+"s5.t":"Commerciële partnerships","s5.d":"Schoenendeals, merkpartnerships en optredens die passen bij de speler en het seizoen.",
+"team.title":"Ons team","team.lede":"Een klein team, zodat elke speler en elke familie weet wie ze moeten bellen.","team.speaks":"Spreekt",
+"journal.title":"Journal","journal.all":"Alle artikels","k.signing":"Transfer","k.insight":"Analyse","k.agency":"Bureau",
+"ig.title":"Op Instagram","ig.follow":"Volg ons",
+"contact.title":"Contact","contact.lede":"Spelers, families, clubs en merken kunnen ons hier schrijven. We antwoorden binnen twee werkdagen.","contact.phone":"Telefoon","contact.office":"Kantoor",
+"form.who":"Ik ben","who.player":"Speler","who.family":"Familie van een speler","who.club":"Een club","who.brand":"Een merk","who.partner":"Andere partner",
+"form.name":"Volledige naam","form.pos":"Positie","form.curclub":"Huidige club","form.club":"Club","form.role":"Je functie","form.company":"Bedrijf","form.web":"Website","form.msg":"Bericht",
+"form.privacy":"We gebruiken je gegevens alleen om dit bericht te beantwoorden. Zie ons privacybeleid.","form.send":"Bericht versturen","form.sent":"Bericht verstuurd. We antwoorden binnen twee werkdagen.",
+"pos1.GK":"Doelman","pos1.DEF":"Verdediger","pos1.MID":"Middenvelder","pos1.FWD":"Aanvaller","pos.GK":"Doelmannen","pos.DEF":"Verdedigers","pos.MID":"Middenvelders","pos.FWD":"Aanvallers",
+"foot.big":"Praat met ons","foot.agency":"Bureau","foot.follow":"Volgen","foot.contact":"Contact","foot.licence":"Licentie","foot.licencetext":"FIFA-voetbalagent, licentie nr. 202X-0000","foot.note":"Designvoorstel. Spelers, foto's en cijfers zijn fictief.","foot.privacy":"Privacybeleid",
+"pf.tm":"Transfermarkt-profiel","pf.ask":"Vraag naar deze speler","pf.born":"Geboren","pf.age":"Leeftijd","pf.nat":"Nationaliteit","pf.club":"Club","pf.league":"Competitie","pf.foot":"Voorkeursvoet","pf.height":"Lengte","pf.until":"Contract tot","pf.number":"Nummer"}};
+const EN = {"talents.all":"All","pos.GK":"Goalkeepers","pos.DEF":"Defenders","pos.MID":"Midfielders","pos.FWD":"Forwards","team.speaks":"Speaks","k.signing":"Signing","k.insight":"Insight","k.agency":"Agency",
+  "pf.born":"Born","pf.age":"Age","pf.nat":"Nationality","pf.club":"Club","pf.league":"League","pf.foot":"Stronger foot","pf.height":"Height","pf.until":"Contract until","pf.number":"Number"};
+document.querySelectorAll("[data-i18n]").forEach(el=>{ if(!T.en[el.dataset.i18n]) T.en[el.dataset.i18n] = el.textContent; });
+let lang = "en";
+const t = (k)=> (T[lang]&&T[lang][k]) || EN[k] || T.en[k] || k;
+const locale = ()=> lang==="en"?"en-GB":lang==="fr"?"fr-BE":"nl-BE";
+const posName = (p)=> lang==="en" ? p.pos : t("pos1."+p.g);
+
+/* placeholder tones so each player reads as a different photograph */
+function tone(i,dark){
+  const r=(k)=>{const x=Math.sin((i+1)*91.7+k*13.3)*43758.5;return x-Math.floor(x)};
+  const a = dark ? 40+Math.round(r(1)*40) : 175+Math.round(r(1)*55);
+  const b = dark ? 10+Math.round(r(2)*20) : 60+Math.round(r(2)*60);
+  return `--t1:rgb(${a},${a},${a});--t2:rgb(${b},${b},${b});--ang:${140+Math.round(r(3)*60)}deg`;
+}
+const age = (b)=>{const d=new Date(b);let a=TODAY.getFullYear()-d.getFullYear();const m=TODAY.getMonth()-d.getMonth();if(m<0||(m===0&&TODAY.getDate()<d.getDate()))a--;return a};
+const fmt = (d)=> new Date(d).toLocaleDateString(locale(),{day:"numeric",month:"long",year:"numeric"});
+const surname = (p)=> p.name.split(" ").slice(-1)[0];
+
+/* hero wall */
+const wall = document.getElementById("wall"), namesEl = document.getElementById("names"), fl = document.getElementById("float");
+let onIdx = 10;
+namesEl.innerHTML = players.map(p=>`<button type="button" data-i="${p.i}" class="${p.i===onIdx?"on":""}" aria-label="${p.name}, ${p.pos}">${surname(p)}<sup>${p.n}</sup></button>`).join("");
+function showWall(btn){
+  if(!btn) return;
+  onIdx = +btn.dataset.i;
+  namesEl.querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===btn));
+  fl.setAttribute("style", tone(onIdx));
+  const p = players[onIdx];
+  document.getElementById("floatCap").textContent = p.name + ", " + p.club;
+  const wr = wall.getBoundingClientRect(), br = btn.getBoundingClientRect(), w = fl.offsetWidth, h = fl.offsetHeight;
+  let left = br.left - wr.left + br.width*0.6; if(left + w > wr.width) left = Math.max(0, br.left - wr.left - w*0.6);
+  fl.style.left = left+"px"; fl.style.top = Math.max(0, br.top - wr.top - h*0.35)+"px";
+}
+namesEl.addEventListener("mouseover",e=>showWall(e.target.closest("button")));
+namesEl.addEventListener("focusin",e=>showWall(e.target.closest("button")));
+namesEl.addEventListener("click",e=>{const b=e.target.closest("button");if(b)openProfile(+b.dataset.i);});
+requestAnimationFrame(()=>showWall(namesEl.querySelector(".on")));
+if(document.fonts) document.fonts.ready.then(()=>showWall(namesEl.querySelector(".on")));
+window.addEventListener("resize",()=>showWall(namesEl.querySelector(".on")));
+
+/* talents */
+let filter = "ALL", view = "rows";
+const chips = document.getElementById("chips");
+function renderChips(){
+  const g = [["ALL",t("talents.all"),players.length]].concat(["GK","DEF","MID","FWD"].map(k=>[k,t("pos."+k),players.filter(p=>p.g===k).length]));
+  chips.innerHTML = g.map(([k,l,c])=>`<button type="button" data-g="${k}" aria-pressed="${filter===k}">${l}<span>${c}</span></button>`).join("");
+}
+chips.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;filter=b.dataset.g;renderChips();renderTalents();});
+function renderTalents(){
+  const L = players.filter(p=>filter==="ALL"||p.g===filter);
+  document.getElementById("rows").innerHTML = L.map(p=>`
+    <div class="rowp" role="button" tabindex="0" data-i="${p.i}" data-tone="${p.i}">
+      <span class="no">${p.n}</span><span class="nm">${p.name}</span><span class="c pos">${posName(p)}</span><span class="c">${p.club}</span><span class="c">${p.nat}</span><span class="r">${age(p.born)}</span>
+      <span class="photo thumb" style="${tone(p.i)}"></span>
+    </div>`).join("");
+  document.getElementById("grid").innerHTML = L.map(p=>`
+    <button type="button" class="card" data-i="${p.i}">
+      <div class="photo" style="${tone(p.i)}"><span class="n">${p.n}</span></div>
+      <p class="nm">${p.name}</p><p class="mt">${posName(p)}, ${p.club}</p>
+    </button>`).join("");
+}
+document.querySelector(".views").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;view=b.dataset.view;
+  document.querySelectorAll(".views button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  document.getElementById("rows").hidden = view!=="rows";
+  document.getElementById("grid").hidden = view!=="grid";
+});
+["rows","grid"].forEach(id=>{
+  const el = document.getElementById(id);
+  el.addEventListener("click",e=>{const r=e.target.closest("[data-i]");if(r)openProfile(+r.dataset.i);});
+  el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){const r=e.target.closest(".rowp");if(r){e.preventDefault();openProfile(+r.dataset.i);}}});
+});
+
+/* photo that follows the cursor over talent and journal rows */
+const hp = document.getElementById("hoverPhoto");
+function follow(container, sel){
+  container.addEventListener("mousemove",e=>{
+    const r = e.target.closest(sel);
+    if(!r){ hp.classList.remove("show"); return; }
+    hp.setAttribute("style", tone(+r.dataset.tone));
+    const w = 220, h = w*4/3;
+    let x = e.clientX + 28; if(x + w > innerWidth - 16) x = e.clientX - w - 28;
+    hp.style.left = x+"px"; hp.style.top = Math.min(innerHeight - h - 16, Math.max(16, e.clientY - h/2))+"px";
+    hp.classList.add("show");
+  });
+  container.addEventListener("mouseleave",()=>hp.classList.remove("show"));
+}
+follow(document.getElementById("rows"), ".rowp");
+follow(document.getElementById("jrows"), ".jrow");
+
+/* team, journal, instagram */
+function renderTeam(){
+  document.getElementById("teamGrid").innerHTML = team.map((m,i)=>`
+    <article class="person"><div class="photo" style="${tone(40+i)}"></div><h3>${m.name}</h3><p class="role">${m.role[lang]}</p><p class="langs">${t("team.speaks")} ${m.langs}</p></article>`).join("");
+}
+function renderJournal(){
+  document.getElementById("jrows").innerHTML = posts.map((p,i)=>`
+    <a class="jrow" href="#journal" data-tone="${60+i}"><span class="d">${fmt(p.d)}</span><span class="k">${t("k."+p.k)}</span><h3>${p.t}</h3></a>`).join("");
+}
+document.getElementById("ig").innerHTML = igCaptions.map((c,i)=>`
+  <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="${c}"><div class="photo" style="${tone(80+i,true)}"></div><span>${c}</span></a>`).join("");
+
+/* profile */
+const dlg = document.getElementById("profile");
+function openProfile(i){
+  const p = players[i];
+  hp.classList.remove("show");
+  document.getElementById("pfPhoto").setAttribute("style", tone(i));
+  document.getElementById("pfNum").textContent = p.n;
+  document.getElementById("pfName").textContent = p.name;
+  document.getElementById("pfPos").textContent = posName(p) + ", " + p.club;
+  const facts = [["pf.born",fmt(p.born)],["pf.age",age(p.born)],["pf.nat",p.nat],["pf.club",p.club],["pf.league",p.lg],["pf.foot",p.foot],["pf.height",(p.h/100).toFixed(2).replace(".",lang==="en"?".":",")+" m"],["pf.until",new Date(p.until+"-06-30").toLocaleDateString(locale())],["pf.number",p.n]];
+  document.getElementById("pfFacts").innerHTML = facts.map(([k,v])=>`<div><dt>${t(k)}</dt><dd>${v}</dd></div>`).join("");
+  document.getElementById("pfBio").textContent = age(p.born) < 18
+    ? "Academy player. Details for players under 18 are published only with written consent from the family."
+    : `${p.name.split(" ")[0]} joined Numéro 10 in 2024. This short biography is written in the CMS and can cover playing style, previous clubs and recent form.`;
+  if(typeof dlg.showModal==="function") dlg.showModal(); else dlg.setAttribute("open","");
+}
+document.getElementById("pfClose").addEventListener("click",()=>dlg.close());
+document.getElementById("pfAsk").addEventListener("click",()=>dlg.close());
+
+/* contact form */
+const form = document.getElementById("form");
+function syncWho(){
+  const v = form.querySelector("input[name=who]:checked").value;
+  form.querySelectorAll("[data-for]").forEach(f=> f.hidden = !f.dataset.for.split(" ").includes(v));
+}
+document.getElementById("who").addEventListener("change",syncWho);
+form.addEventListener("submit",e=>{
+  e.preventDefault();
+  const bad = [...form.querySelectorAll("[required]")].find(f=>!f.value.trim());
+  if(bad){ bad.focus(); return; }
+  document.getElementById("sent").hidden = false;
+});
+
+/* mobile menu */
+const mnav = document.getElementById("mnav");
+document.getElementById("menuOpen").addEventListener("click",()=>{ mnav.hidden=false; });
+document.getElementById("menuClose").addEventListener("click",()=>{ mnav.hidden=true; });
+mnav.addEventListener("click",e=>{ if(e.target.closest("a")) mnav.hidden=true; });
+
+/* language: saved choice, else browser language, else English */
+function setLang(l){
+  lang = T[l] ? l : "en";
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll("[data-lang]").forEach(b=> b.setAttribute("aria-pressed", b.dataset.lang===lang));
+  try{ localStorage.setItem("n10-lang", lang); }catch(e){}
+  renderChips(); renderTalents(); renderTeam(); renderJournal();
+}
+document.querySelectorAll("[data-lang]").forEach(b=> b.addEventListener("click",()=>setLang(b.dataset.lang)));
+let start = "";
+try{ start = localStorage.getItem("n10-lang") || ""; }catch(e){}
+if(!start){ const nl=(navigator.language||"en").slice(0,2).toLowerCase(); start = ["fr","nl"].includes(nl)?nl:"en"; }
+setLang(start);
+syncWho();
+})();
+</script>

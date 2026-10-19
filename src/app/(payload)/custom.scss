@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@700..900&family=Barlow:wght@400;500;600;700&display=swap');
+
+// Numéro 10 Studio: the admin in the website's black and white.
+:root {
+  --font-body: 'Barlow', ui-sans-serif, 'Helvetica Neue', Arial, sans-serif;
+  --style-radius-s: 2px;
+  --style-radius-m: 3px;
+  --style-radius-l: 4px;
+  --n10-logo-filter: none;
+}
+
+html[data-theme='dark'] {
+  --n10-logo-filter: invert(1);
+  --theme-bg: #000000;
+  --theme-input-bg: #0a0a0a;
+  --theme-text: #ffffff;
+  --theme-elevation-0: #000000;
+  --theme-elevation-50: #121212;
+  --theme-elevation-100: #1c1c1c;
+  --theme-elevation-150: #242424;
+  --theme-elevation-200: #2b2b2b;
+  --theme-elevation-250: #333333;
+  --theme-elevation-300: #3d3d3d;
+  --theme-elevation-350: #474747;
+  --theme-elevation-400: #575757;
+  --theme-elevation-450: #666666;
+  --theme-elevation-500: #8a8a8a;
+  --theme-elevation-550: #969696;
+  --theme-elevation-600: #a3a3a3;
+  --theme-elevation-650: #b0b0b0;
+  --theme-elevation-700: #bdbdbd;
+  --theme-elevation-750: #c9c9c9;
+  --theme-elevation-800: #d6d6d6;
+  --theme-elevation-850: #e3e3e3;
+  --theme-elevation-900: #f0f0f0;
+  --theme-elevation-950: #f7f7f7;
+  --theme-elevation-1000: #ffffff;
+}
+
+// Page titles in the website's display face
+.doc-header__title,
+.list-header h1,
+.dashboard h1,
+.global-edit h1,
+h1.render-title {
+  font-family: 'Big Shoulders', 'Big Shoulders Display', 'Arial Narrow', Impact, sans-serif;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: -0.005em;
+  line-height: 0.95;
+}
+
+// Primary buttons: white on black
+html[data-theme='dark'] .btn--style-primary {
+  --bg-color: #ffffff;
+  --color: #000000;
+  --hover-bg: #d6d6d6;
+  --hover-color: #000000;
+}
