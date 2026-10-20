@@ -372,7 +372,7 @@ async function seedGlobals(payload: Payload) {
       contactEmail: 'contact@numero10.com',
       phone: '+32 000 00 00 00',
       office: 'Brussels, Belgium',
-      fifaLicence: '202X-0000',
+      fifaLicence: '202311-5454',
       instagramHandle: 'numero10agency',
       emailNotifications: true,
     },

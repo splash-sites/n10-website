@@ -23,7 +23,7 @@ export const Settings: GlobalConfig = {
               type: 'row',
               fields: [
                 { name: 'office', type: 'text', localized: true, defaultValue: 'Brussels, Belgium' },
-                { name: 'fifaLicence', label: 'FIFA licence number', type: 'text' },
+                { name: 'fifaLicence', label: 'FIFA licence number', type: 'text', defaultValue: '202311-5454' },
               ],
             },
             {
