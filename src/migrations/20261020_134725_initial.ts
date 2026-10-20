@@ -417,7 +417,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"id" serial PRIMARY KEY NOT NULL,
   	"contact_email" varchar DEFAULT 'contact@numero10.com' NOT NULL,
   	"phone" varchar,
-  	"fifa_licence" varchar,
+  	"fifa_licence" varchar DEFAULT '202311-5454',
   	"instagram_handle" varchar,
   	"linkedin_url" varchar,
   	"email_notifications" boolean DEFAULT true,

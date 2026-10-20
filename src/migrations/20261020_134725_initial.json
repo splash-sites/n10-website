@@ -4567,7 +4567,8 @@
           "name": "fifa_licence",
           "type": "varchar",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'202311-5454'"
         },
         "instagram_handle": {
           "name": "instagram_handle",
@@ -5112,6 +5113,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "d3f4f49d-bbdf-458f-b5d9-fe6348416e16",
+  "id": "493662b9-1039-43ee-b631-b0ccd0dd6eae",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }
