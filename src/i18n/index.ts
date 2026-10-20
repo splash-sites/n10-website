@@ -24,7 +24,7 @@ const en = {
   } as Record<string, string>,
   profile: {
     born: 'Born', age: 'Age', nationality: 'Nationality', club: 'Club', league: 'League', foot: 'Stronger foot', height: 'Height',
-    until: 'Contract until', number: 'Number', joined: 'With Numéro 10 since', transfermarkt: 'Transfermarkt profile',
+    number: 'Number', joined: 'With Numéro 10 since', transfermarkt: 'Transfermarkt profile',
     highlights: 'Watch highlights', ask: 'Ask about this player', back: 'All talents', news: 'In the journal',
     feet: { left: 'Left', right: 'Right', both: 'Both' } as Record<string, string>,
   },
@@ -91,7 +91,7 @@ const fr: Dictionary = {
   },
   profile: {
     born: 'Né le', age: 'Âge', nationality: 'Nationalité', club: 'Club', league: 'Championnat', foot: 'Pied fort', height: 'Taille',
-    until: "Contrat jusqu'au", number: 'Numéro', joined: 'Chez Numéro 10 depuis', transfermarkt: 'Profil Transfermarkt',
+    number: 'Numéro', joined: 'Chez Numéro 10 depuis', transfermarkt: 'Profil Transfermarkt',
     highlights: 'Voir les highlights', ask: 'Se renseigner sur ce joueur', back: 'Tous les talents', news: 'Dans le journal',
     feet: { left: 'Gauche', right: 'Droit', both: 'Les deux' },
   },
@@ -155,7 +155,7 @@ const nl: Dictionary = {
   },
   profile: {
     born: 'Geboren', age: 'Leeftijd', nationality: 'Nationaliteit', club: 'Club', league: 'Competitie', foot: 'Voorkeursvoet', height: 'Lengte',
-    until: 'Contract tot', number: 'Nummer', joined: 'Bij Numéro 10 sinds', transfermarkt: 'Transfermarkt-profiel',
+    number: 'Nummer', joined: 'Bij Numéro 10 sinds', transfermarkt: 'Transfermarkt-profiel',
     highlights: 'Bekijk highlights', ask: 'Vraag naar deze speler', back: 'Alle talenten', news: 'In het journal',
     feet: { left: 'Links', right: 'Rechts', both: 'Beide' },
   },

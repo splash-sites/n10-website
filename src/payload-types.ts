@@ -99,11 +99,13 @@ export interface Config {
     home: Home;
     services: Service;
     settings: Setting;
+    privacy: Privacy;
   };
   globalsSelect: {
     home: HomeSelect<false> | HomeSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
     settings: SettingsSelect<false> | SettingsSelect<true>;
+    privacy: PrivacySelect<false> | PrivacySelect<true>;
   };
   locale: 'en' | 'fr' | 'nl';
   widgets: {
@@ -164,6 +166,9 @@ export interface Player {
   nationalities: string[];
   currentClub: string;
   league?: string | null;
+  /**
+   * Only visible in this panel.
+   */
   contractUntil?: string | null;
   joinedAgency?: string | null;
   /**
@@ -909,6 +914,33 @@ export interface Setting {
   createdAt?: string | null;
 }
 /**
+ * The text shown at /privacy. Paste the policy supplied by the agency’s lawyer, in each language.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "privacy".
+ */
+export interface Privacy {
+  id: number;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedOn?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "home_select".
  */
@@ -1080,6 +1112,17 @@ export interface SettingsSelect<T extends boolean = true> {
   seoTitle?: T;
   seoDescription?: T;
   shareImage?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "privacy_select".
+ */
+export interface PrivacySelect<T extends boolean = true> {
+  content?: T;
+  updatedOn?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

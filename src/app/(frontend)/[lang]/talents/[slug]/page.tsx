@@ -43,7 +43,6 @@ export default async function PlayerPage({ params }: Params) {
     [t.profile.league, p.league],
     [t.profile.foot, p.foot ? t.profile.feet[p.foot] : null],
     [t.profile.height, p.heightCm ? `${(p.heightCm / 100).toFixed(2).replace('.', lang === 'en' ? '.' : ',')} m` : null],
-    [t.profile.until, p.contractUntil ? date(p.contractUntil, { day: 'numeric', month: 'short', year: 'numeric' }) : null],
     [t.profile.joined, p.joinedAgency ? date(p.joinedAgency, { month: 'long', year: 'numeric' }) : null],
   ]
 

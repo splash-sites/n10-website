@@ -12,6 +12,8 @@ type BeholdPost = {
 
 // Reads the Behold JSON feed (behold.so). Pinned links come first, hidden
 // links are dropped. Returns an empty list when the feed is not set up.
+// Fetched once a day: Behold's free plan refreshes daily and allows 1,200
+// requests a month, and the server cache means visitors never hit Behold.
 export async function getInstagramPosts(
   feedId: string | null | undefined,
   pinned: string[] = [],
@@ -20,7 +22,7 @@ export async function getInstagramPosts(
 ): Promise<InstagramPost[]> {
   if (!feedId) return []
   try {
-    const res = await fetch(`https://feeds.behold.so/${encodeURIComponent(feedId)}`, { next: { revalidate: 3600 } })
+    const res = await fetch(`https://feeds.behold.so/${encodeURIComponent(feedId)}`, { next: { revalidate: 86400 } })
     if (!res.ok) return []
     const json = (await res.json()) as { posts?: BeholdPost[] } | BeholdPost[]
     const raw = Array.isArray(json) ? json : json.posts ?? []

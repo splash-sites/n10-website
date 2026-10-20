@@ -24,6 +24,7 @@ Open http://localhost:3000 for the site and http://localhost:3000/admin for the 
 | Content › Team | Our team section |
 | Pages › Homepage | Hero (headline, photo, featured player, badge, buttons), numbers, how we work, quotes, the two calls to action, and the title/label/intro or visibility of every section |
 | Pages › What we do | The services bento. The first service gets the large white tile. |
+| Pages › Privacy policy | `/privacy`, per language |
 | Agency › Settings | Contact details, FIFA licence, email notifications, Instagram feed, SEO |
 | Inbox › Messages | Everything sent through the contact form |
 
@@ -37,11 +38,37 @@ Messages are saved in Inbox › Messages and emailed to the addresses in Setting
 
 The feed comes from [Behold](https://behold.so): connect the agency's Instagram account there once, create a JSON feed and paste its ID in Settings › Instagram feed. Pinned and hidden posts are set in the same tab. The section stays hidden until a feed is configured.
 
-## Before launch
+## Deploy (Vercel + Supabase)
 
-- Switch the database to Postgres (`@payloadcms/db-postgres`) and media storage to S3 or R2 (`@payloadcms/storage-s3`).
-- Fill in the SMTP variables.
-- Replace the placeholder privacy policy in `src/app/(frontend)/[lang]/privacy/page.tsx` with the agency's own text.
+1. **Supabase** (free plan): create a project in an EU region. Copy the *Transaction pooler* connection string. In Storage, create a public bucket called `media` and generate S3 access keys.
+2. **GitHub**: push this repository.
+3. **Vercel** (Hobby plan): import the repository and set the variables from `.env.example`: `DATABASE_URL` (the Postgres string), `PAYLOAD_SECRET`, `NEXT_PUBLIC_SERVER_URL`, the five `S3_*` values and `CRON_SECRET`. Deploy.
+4. On the first start in production the database migrations in `src/migrations` run automatically.
+5. **Right after the first deploy, open `/admin` and create the admin account.** Until it exists, anyone who opens `/admin` can create it.
+6. Fill in the content in the panel. Do not run `npm run seed` against production.
+7. Instagram: the account owner signs in at behold.so, connects the Business account, creates a JSON feed and pastes the feed ID in Settings › Instagram feed.
+8. Email, when the domain is known: verify the domain in Resend (SPF/DKIM records in the DNS), then add the `SMTP_*` variables and `EMAIL_FROM` in Vercel and redeploy. Until then messages are saved in the panel only.
+
+After changing a collection or global, create a migration with `DATABASE_URL=<postgres url> npm run payload migrate:create <name>` and commit it.
+
+### Running costs and limits
+
+- Vercel Hobby: free. Vercel's terms reserve Hobby for non-commercial use, so a move to Pro (US$ 20/month) may be required later.
+- Supabase Free: 500 MB database, 1 GB files. A free project pauses after 7 days without activity; `/cron/keepalive` runs daily on Vercel Cron to prevent that.
+- Behold Free: 1 feed, 6 posts, refreshed daily, 1,200 requests a month. The site fetches it once a day.
+- Resend Free: 3,000 emails a month.
+
+### Backups (not set up yet)
+
+The Supabase free plan has no automatic backups. Two options when needed:
+
+- Supabase Pro (US$ 25/month): daily backups kept 7 days, and no pausing.
+- Free: a scheduled GitHub Action that runs `pg_dump` weekly and keeps the file as an artifact or in private storage.
+
+## Still to do before announcing the site
+
+- Paste the agency's privacy policy in Pages › Privacy policy (GDPR).
 - Replace sample players, photos and figures.
+- Set up email (step 8 above).
 
 Design mockups that were approved with the client are in `design/`.

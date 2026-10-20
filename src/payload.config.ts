@@ -1,4 +1,6 @@
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
+import { s3Storage } from '@payloadcms/storage-s3'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
@@ -13,11 +15,24 @@ import { Posts } from './collections/Posts'
 import { Team } from './collections/Team'
 import { Users } from './collections/Users'
 import { Home } from './globals/Home'
+import { Privacy } from './globals/Privacy'
 import { Services } from './globals/Services'
 import { Settings } from './globals/Settings'
+import { migrations } from './migrations'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+// Postgres (Supabase) in production, a SQLite file for quick local work.
+// Postgres schema changes go through migrations in src/migrations.
+const databaseUrl = process.env.DATABASE_URL || ''
+const db = databaseUrl.startsWith('postgres')
+  ? postgresAdapter({
+      pool: { connectionString: databaseUrl },
+      migrationDir: path.resolve(dirname, 'migrations'),
+      prodMigrations: migrations,
+    })
+  : sqliteAdapter({ client: { url: databaseUrl } })
 
 // Without SMTP settings Payload prints outgoing emails to the server log,
 // which is enough for local development.
@@ -62,18 +77,31 @@ export default buildConfig({
     fallback: true,
   },
   collections: [Players, Posts, Team, Media, Messages, Users],
-  globals: [Home, Services, Settings],
+  globals: [Home, Services, Settings, Privacy],
   editor: lexicalEditor(),
   email,
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  db: sqliteAdapter({
-    client: {
-      url: process.env.DATABASE_URL || '',
-    },
-  }),
+  db,
   sharp,
-  plugins: [],
+  plugins: [
+    // Uploads go to Supabase Storage (S3-compatible) when configured. Without
+    // it they are written to ./media, which only works locally.
+    s3Storage({
+      enabled: Boolean(process.env.S3_BUCKET),
+      collections: { media: true },
+      bucket: process.env.S3_BUCKET || '',
+      config: {
+        endpoint: process.env.S3_ENDPOINT,
+        region: process.env.S3_REGION || 'eu-central-1',
+        forcePathStyle: true,
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+          secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+        },
+      },
+    }),
+  ],
 })

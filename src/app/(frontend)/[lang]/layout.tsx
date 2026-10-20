@@ -92,7 +92,7 @@ export default async function LangLayout({ children, params }: { children: React
               </div>
             </div>
             <Link href={`${base}#contact`} aria-label={t.footer.talk}>
-              <img className="logo-xl" src="/n10-logo.png" alt="" width={1400} height={606} />
+              <img className="logo-xl" src="/n10-logo.png" alt="" width={74} height={32} />
             </Link>
             <div className="legal">
               <span>© {new Date().getFullYear()} Numéro 10</span>

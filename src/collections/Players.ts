@@ -87,9 +87,15 @@ export const Players: CollectionConfig = {
                 { name: 'league', type: 'text', admin: { width: '30%' } },
                 {
                   name: 'contractUntil',
-                  label: 'Contract until',
+                  label: 'Contract until (internal)',
                   type: 'date',
-                  admin: { width: '30%', date: { pickerAppearance: 'dayOnly', displayFormat: 'd MMM yyyy' } },
+                  // Never exposed on the website or the public API
+                  access: { read: ({ req }) => Boolean(req.user) },
+                  admin: {
+                    width: '30%',
+                    date: { pickerAppearance: 'dayOnly', displayFormat: 'd MMM yyyy' },
+                    description: 'Only visible in this panel.',
+                  },
                 },
               ],
             },
