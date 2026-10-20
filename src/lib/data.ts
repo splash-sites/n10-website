@@ -80,8 +80,8 @@ export const getTeam = cache(async (locale: Locale) => {
 export const getGlobals = cache(async (locale: Locale) => {
   const p = await payload()
   const [home, services, settings] = await Promise.all([
-    p.findGlobal({ slug: 'home', locale, depth: 0 }),
-    p.findGlobal({ slug: 'services', locale, depth: 0 }),
+    p.findGlobal({ slug: 'home', locale, depth: 1 }),
+    p.findGlobal({ slug: 'services', locale, depth: 1 }),
     p.findGlobal({ slug: 'settings', locale, depth: 1 }),
   ])
   return { home, services, settings }

@@ -657,59 +657,183 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Home {
   id: number;
+  /**
+   * One line per row. Three short lines work best.
+   */
+  headline?: string | null;
+  /**
+   * Large photo on the right. Shown in black and white. Landscape, at least 2000 px wide.
+   */
+  heroImage?: (number | null) | Media;
+  /**
+   * Shown in the small card at the bottom right. Empty means no card.
+   */
+  heroPlayer?: (number | null) | Player;
+  badgeLabel?: string | null;
+  /**
+   * Empty means the latest journal article is shown.
+   */
+  badgeText?: string | null;
+  /**
+   * Optional. Shown in bold before the intro.
+   */
   introBold?: string | null;
   introText?: string | null;
   ctaPrimary?: string | null;
   ctaSecondary?: string | null;
-  /**
-   * Players, nationalities and leagues are counted from the published talents.
-   */
   showFacts?: boolean | null;
   /**
-   * Leave the title and intro empty to use the standard text.
+   * Up to four tiles. "Counted automatically" uses the published talents.
+   */
+  stats?:
+    | {
+        source: 'players' | 'nationalities' | 'leagues' | 'custom';
+        value?: number | null;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  steps?:
+    | {
+        title: string;
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  quotes?:
+    | {
+        quote: string;
+        name: string;
+        /**
+         * For example: Striker, Union Saint-Gilloise
+         */
+        role?: string | null;
+        photo?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  ctaPlayers?: {
+    eyebrow?: string | null;
+    title?: string | null;
+    text?: string | null;
+    preselect?: ('player' | 'family' | 'club' | 'brand' | 'partner') | null;
+  };
+  ctaClubs?: {
+    eyebrow?: string | null;
+    title?: string | null;
+    text?: string | null;
+    preselect?: ('player' | 'family' | 'club' | 'brand' | 'partner') | null;
+  };
+  /**
+   * Leave the texts empty to use the standard wording.
    */
   talents?: {
     show?: boolean | null;
+    eyebrow?: string | null;
+    /**
+     * Use Enter for a line break.
+     */
     title?: string | null;
     intro?: string | null;
   };
   /**
-   * Leave the title and intro empty to use the standard text.
+   * The club names come from the published talents.
+   */
+  clubs?: {
+    show?: boolean | null;
+    title?: string | null;
+  };
+  /**
+   * Leave the texts empty to use the standard wording.
    */
   services?: {
     show?: boolean | null;
+    eyebrow?: string | null;
+    /**
+     * Use Enter for a line break.
+     */
     title?: string | null;
     intro?: string | null;
   };
   /**
-   * Leave the title and intro empty to use the standard text.
+   * Leave the texts empty to use the standard wording.
+   */
+  process?: {
+    show?: boolean | null;
+    eyebrow?: string | null;
+    /**
+     * Use Enter for a line break.
+     */
+    title?: string | null;
+    intro?: string | null;
+  };
+  /**
+   * Leave the texts empty to use the standard wording.
+   */
+  quotesSection?: {
+    show?: boolean | null;
+    eyebrow?: string | null;
+    /**
+     * Use Enter for a line break.
+     */
+    title?: string | null;
+  };
+  /**
+   * Leave the texts empty to use the standard wording.
    */
   team?: {
     show?: boolean | null;
+    eyebrow?: string | null;
+    /**
+     * Use Enter for a line break.
+     */
     title?: string | null;
     intro?: string | null;
   };
   /**
-   * Leave the title and intro empty to use the standard text.
+   * Leave the texts empty to use the standard wording.
    */
   journal?: {
     show?: boolean | null;
+    eyebrow?: string | null;
+    /**
+     * Use Enter for a line break.
+     */
     title?: string | null;
     intro?: string | null;
   };
   /**
-   * Leave the title and intro empty to use the standard text.
+   * Leave the texts empty to use the standard wording.
    */
   instagram?: {
     show?: boolean | null;
+    eyebrow?: string | null;
+    /**
+     * Use Enter for a line break.
+     */
     title?: string | null;
     intro?: string | null;
   };
   /**
-   * Leave the title and intro empty to use the standard text.
+   * Leave the texts empty to use the standard wording.
+   */
+  ctas?: {
+    show?: boolean | null;
+    eyebrow?: string | null;
+    /**
+     * Use Enter for a line break.
+     */
+    title?: string | null;
+  };
+  /**
+   * Leave the texts empty to use the standard wording.
    */
   contact?: {
     show?: boolean | null;
+    eyebrow?: string | null;
+    /**
+     * Use Enter for a line break.
+     */
     title?: string | null;
     intro?: string | null;
   };
@@ -722,10 +846,21 @@ export interface Home {
  */
 export interface Service {
   id: number;
+  /**
+   * The first service gets the large white tile on the homepage.
+   */
   items?:
     | {
+        /**
+         * For example: Planning
+         */
+        tag?: string | null;
         title: string;
         description: string;
+        /**
+         * Optional. Used on the first (large) tile and the last tile.
+         */
+        image?: (number | null) | Media;
         id?: string | null;
       }[]
     | null;
@@ -778,29 +913,98 @@ export interface Setting {
  * via the `definition` "home_select".
  */
 export interface HomeSelect<T extends boolean = true> {
+  headline?: T;
+  heroImage?: T;
+  heroPlayer?: T;
+  badgeLabel?: T;
+  badgeText?: T;
   introBold?: T;
   introText?: T;
   ctaPrimary?: T;
   ctaSecondary?: T;
   showFacts?: T;
+  stats?:
+    | T
+    | {
+        source?: T;
+        value?: T;
+        label?: T;
+        id?: T;
+      };
+  steps?:
+    | T
+    | {
+        title?: T;
+        text?: T;
+        id?: T;
+      };
+  quotes?:
+    | T
+    | {
+        quote?: T;
+        name?: T;
+        role?: T;
+        photo?: T;
+        id?: T;
+      };
+  ctaPlayers?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        text?: T;
+        preselect?: T;
+      };
+  ctaClubs?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        text?: T;
+        preselect?: T;
+      };
   talents?:
     | T
     | {
         show?: T;
+        eyebrow?: T;
         title?: T;
         intro?: T;
+      };
+  clubs?:
+    | T
+    | {
+        show?: T;
+        title?: T;
       };
   services?:
     | T
     | {
         show?: T;
+        eyebrow?: T;
         title?: T;
         intro?: T;
+      };
+  process?:
+    | T
+    | {
+        show?: T;
+        eyebrow?: T;
+        title?: T;
+        intro?: T;
+      };
+  quotesSection?:
+    | T
+    | {
+        show?: T;
+        eyebrow?: T;
+        title?: T;
       };
   team?:
     | T
     | {
         show?: T;
+        eyebrow?: T;
         title?: T;
         intro?: T;
       };
@@ -808,6 +1012,7 @@ export interface HomeSelect<T extends boolean = true> {
     | T
     | {
         show?: T;
+        eyebrow?: T;
         title?: T;
         intro?: T;
       };
@@ -815,13 +1020,22 @@ export interface HomeSelect<T extends boolean = true> {
     | T
     | {
         show?: T;
+        eyebrow?: T;
         title?: T;
         intro?: T;
+      };
+  ctas?:
+    | T
+    | {
+        show?: T;
+        eyebrow?: T;
+        title?: T;
       };
   contact?:
     | T
     | {
         show?: T;
+        eyebrow?: T;
         title?: T;
         intro?: T;
       };
@@ -837,8 +1051,10 @@ export interface ServicesSelect<T extends boolean = true> {
   items?:
     | T
     | {
+        tag?: T;
         title?: T;
         description?: T;
+        image?: T;
         id?: T;
       };
   updatedAt?: T;

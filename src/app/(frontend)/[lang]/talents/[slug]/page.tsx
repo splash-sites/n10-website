@@ -55,7 +55,7 @@ export default async function PlayerPage({ params }: Params) {
         </Photo>
         <div className="info">
           <p className="crumb">
-            <Link href={`/${lang}#talents`}>{t.profile.back}</Link>
+            <Link href={`/${lang}/talents`}>{t.profile.back}</Link>
           </p>
           <div>
             <h1>{p.name}</h1>
@@ -90,7 +90,7 @@ export default async function PlayerPage({ params }: Params) {
                 Instagram
               </a>
             ) : null}
-            <Link className="btn ghost" href={`/${lang}#contact`}>
+            <Link className="btn ghost" href={`/${lang}?who=club#contact`}>
               {t.profile.ask}
             </Link>
           </div>

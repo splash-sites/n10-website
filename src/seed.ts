@@ -8,6 +8,7 @@ import config from '@payload-config'
 import { getPayload, type Payload } from 'payload'
 import sharp from 'sharp'
 
+import { slugify } from './lib/positions'
 import type { Player } from './payload-types'
 
 type L = { en: string; fr: string; nl: string }
@@ -87,15 +88,87 @@ const services: { title: L; description: L }[] = [
 ]
 
 const home = {
-  introBold: { en: 'Numéro 10 represents twenty professional footballers.', fr: 'Numéro 10 représente vingt footballeurs professionnels.', nl: 'Numéro 10 vertegenwoordigt twintig profvoetballers.' },
+  headline: { en: 'Careers\nbuilt for\nthe long run', fr: 'Des carrières\npensées pour\ndurer', nl: 'Carrières\ngebouwd voor\nde lange termijn' },
   introText: {
-    en: 'We negotiate their contracts, plan their careers and handle the legal, financial and commercial side.',
-    fr: 'Nous négocions leurs contrats, planifions leur carrière et gérons les aspects juridiques, financiers et commerciaux.',
-    nl: 'We onderhandelen hun contracten, plannen hun carrière en regelen de juridische, financiële en commerciële kant.',
+    en: 'Numéro 10 is a FIFA-licensed agency in Belgium. We represent twenty footballers and look after their contracts, their next move and everything off the pitch.',
+    fr: "Numéro 10 est une agence belge licenciée FIFA. Nous représentons vingt footballeurs et gérons leurs contrats, leur prochain transfert et tout ce qui se passe en dehors du terrain.",
+    nl: 'Numéro 10 is een Belgisch bureau met FIFA-licentie. We vertegenwoordigen twintig voetballers en zorgen voor hun contracten, hun volgende stap en alles naast het veld.',
   },
-  ctaPrimary: { en: 'See every profile', fr: 'Voir tous les profils', nl: 'Bekijk alle profielen' },
-  ctaSecondary: { en: 'Contact the agency', fr: "Contacter l'agence", nl: 'Neem contact op' },
+  ctaPrimary: { en: 'See our talents', fr: 'Voir nos talents', nl: 'Bekijk onze talenten' },
+  ctaSecondary: { en: 'Talk to an agent', fr: 'Parler à un agent', nl: 'Spreek een agent' },
+  badgeLabel: { en: 'New', fr: 'Nouveau', nl: 'Nieuw' },
 }
+
+const stats: { source: 'players' | 'nationalities' | 'leagues' | 'custom'; value?: number; label: L }[] = [
+  { source: 'players', label: { en: 'Professional players represented', fr: 'Joueurs professionnels représentés', nl: 'Vertegenwoordigde profvoetballers' } },
+  { source: 'nationalities', label: { en: 'Nationalities in the roster', fr: "Nationalités dans l'effectif", nl: 'Nationaliteiten in de kern' } },
+  { source: 'leagues', label: { en: 'Leagues across Europe', fr: 'Championnats en Europe', nl: 'Competities in Europa' } },
+  { source: 'custom', value: 2, label: { en: 'Days to answer every message', fr: 'Jours pour répondre à chaque message', nl: 'Dagen om elk bericht te beantwoorden' } },
+]
+
+const steps: { title: L; text: L }[] = [
+  {
+    title: { en: 'We meet', fr: 'On se rencontre', nl: 'We ontmoeten elkaar' },
+    text: {
+      en: 'With the player and the family, at home or at the club. No contract on the first day.',
+      fr: 'Avec le joueur et sa famille, à la maison ou au club. Pas de contrat le premier jour.',
+      nl: 'Met de speler en de familie, thuis of op de club. Geen contract op de eerste dag.',
+    },
+  },
+  {
+    title: { en: 'We plan', fr: 'On planifie', nl: 'We plannen' },
+    text: {
+      en: 'Where the player is now, where he can be in three seasons, and what has to happen first.',
+      fr: "Où en est le joueur, où il peut être dans trois saisons, et ce qu'il faut faire d'abord.",
+      nl: 'Waar de speler nu staat, waar hij over drie seizoenen kan staan en wat er eerst moet gebeuren.',
+    },
+  },
+  {
+    title: { en: 'We negotiate', fr: 'On négocie', nl: 'We onderhandelen' },
+    text: {
+      en: 'With clubs, sponsors and lawyers. The player decides; we make sure every option is on the table.',
+      fr: 'Avec les clubs, les sponsors et les avocats. Le joueur décide ; nous mettons toutes les options sur la table.',
+      nl: 'Met clubs, sponsors en advocaten. De speler beslist; wij zorgen dat elke optie op tafel ligt.',
+    },
+  },
+  {
+    title: { en: 'We stay', fr: 'On reste', nl: 'We blijven' },
+    text: {
+      en: 'After the signature we follow every match, every injury and every window.',
+      fr: 'Après la signature, nous suivons chaque match, chaque blessure et chaque mercato.',
+      nl: 'Na de handtekening volgen we elke wedstrijd, elke blessure en elke transferperiode.',
+    },
+  },
+]
+
+const quotes: { quote: L; name: string; role: L }[] = [
+  {
+    quote: {
+      en: 'They told me to stay one more season when everyone else said leave. It was the right call.',
+      fr: "Ils m'ont conseillé de rester une saison de plus quand tout le monde disait de partir. C'était le bon choix.",
+      nl: 'Ze zeiden me nog een seizoen te blijven toen iedereen zei dat ik moest vertrekken. Het was de juiste keuze.',
+    },
+    name: 'Jonas Claes',
+    role: { en: 'Striker, Union Saint-Gilloise', fr: 'Avant-centre, Union Saint-Gilloise', nl: 'Spits, Union Saint-Gilloise' },
+  },
+  {
+    quote: {
+      en: 'My parents had every question answered before I signed anything.',
+      fr: 'Mes parents avaient une réponse à chaque question avant que je signe quoi que ce soit.',
+      nl: 'Mijn ouders kregen op elke vraag een antwoord voor ik iets tekende.',
+    },
+    name: 'Noah Peeters',
+    role: { en: 'Left back, KRC Genk', fr: 'Latéral gauche, KRC Genk', nl: 'Linksachter, KRC Genk' },
+  },
+]
+
+const serviceTags: L[] = [
+  { en: 'Core service', fr: 'Service principal', nl: 'Kerndienst' },
+  { en: 'Planning', fr: 'Planification', nl: 'Planning' },
+  { en: 'Protection', fr: 'Protection', nl: 'Bescherming' },
+  { en: 'Visibility', fr: 'Visibilité', nl: 'Zichtbaarheid' },
+  { en: 'Partners', fr: 'Partenaires', nl: 'Partners' },
+]
 
 const para = (text: string) => ({
   type: 'paragraph',
@@ -167,25 +240,11 @@ async function placeholder(payload: Payload, seed: number, alt: string, w = 1200
   return payload.create({
     collection: 'media',
     data: { alt },
-    file: { data, mimetype: 'image/jpeg', name: `placeholder-${seed}.jpg`, size: data.length },
+    file: { data, mimetype: 'image/jpeg', name: `placeholder-${slugify(alt)}-${seed}.jpg`, size: data.length },
   })
 }
 
-async function run() {
-  const payload = await getPayload({ config })
-  const force = process.argv.includes('--force')
-  const { totalDocs } = await payload.count({ collection: 'players' })
-
-  if (totalDocs && !force) {
-    payload.logger.info('The database already has players. Run `npm run seed -- --force` to replace the sample content.')
-    process.exit(0)
-  }
-  if (force) {
-    for (const collection of ['posts', 'players', 'team', 'media'] as const) {
-      await payload.delete({ collection, where: { id: { exists: true } } })
-    }
-  }
-
+async function seedCollections(payload: Payload) {
   const ids: Record<string, number> = {}
   for (const [i, [name, n, position, birthDate, club, league, nats, foot, h, until]] of players.entries()) {
     const portrait = await placeholder(payload, i + 3, name)
@@ -247,25 +306,62 @@ async function run() {
       },
     })
   }
+}
 
-  for (const l of ['en', 'fr', 'nl'] as const) {
+// Globals are always (re)written, so new homepage sections get sample text
+// even on a database that already has players.
+async function seedGlobals(payload: Payload) {
+  const hero = await payload.find({ collection: 'players', where: { name: { equals: 'Ilyas Benali' } }, limit: 1, depth: 0 })
+  const existing = await payload.findGlobal({ slug: 'home', depth: 0 })
+  const heroImage = existing.heroImage ?? (await placeholder(payload, 11, 'Hero placeholder', 2400, 1600)).id
+  const quotePhotos = await Promise.all(quotes.map((q, i) => placeholder(payload, 15 + i * 7, q.name, 1200, 1500)))
+
+  const en = await payload.updateGlobal({
+    slug: 'home',
+    locale: 'en',
+    data: {
+      headline: home.headline.en,
+      introBold: '',
+      introText: home.introText.en,
+      ctaPrimary: home.ctaPrimary.en,
+      ctaSecondary: home.ctaSecondary.en,
+      badgeLabel: home.badgeLabel.en,
+      heroImage,
+      heroPlayer: hero.docs[0]?.id,
+      showFacts: true,
+      stats: stats.map((s) => ({ source: s.source, value: s.value, label: s.label.en })),
+      steps: steps.map((s) => ({ title: s.title.en, text: s.text.en })),
+      quotes: quotes.map((q, i) => ({ quote: q.quote.en, name: q.name, role: q.role.en, photo: quotePhotos[i].id })),
+    },
+  })
+  for (const l of ['fr', 'nl'] as const) {
     await payload.updateGlobal({
       slug: 'home',
       locale: l,
-      data: { introBold: home.introBold[l], introText: home.introText[l], ctaPrimary: home.ctaPrimary[l], ctaSecondary: home.ctaSecondary[l] },
+      data: {
+        headline: home.headline[l],
+        introBold: '',
+        introText: home.introText[l],
+        ctaPrimary: home.ctaPrimary[l],
+        ctaSecondary: home.ctaSecondary[l],
+        badgeLabel: home.badgeLabel[l],
+        stats: stats.map((s, i) => ({ id: en.stats?.[i]?.id, source: s.source, value: s.value, label: s.label[l] })),
+        steps: steps.map((s, i) => ({ id: en.steps?.[i]?.id, title: s.title[l], text: s.text[l] })),
+        quotes: quotes.map((q, i) => ({ id: en.quotes?.[i]?.id, quote: q.quote[l], name: q.name, role: q.role[l], photo: quotePhotos[i].id })),
+      },
     })
   }
 
   const svc = await payload.updateGlobal({
     slug: 'services',
     locale: 'en',
-    data: { items: services.map((s) => ({ title: s.title.en, description: s.description.en })) },
+    data: { items: services.map((s, i) => ({ tag: serviceTags[i].en, title: s.title.en, description: s.description.en })) },
   })
   for (const l of ['fr', 'nl'] as const) {
     await payload.updateGlobal({
       slug: 'services',
       locale: l,
-      data: { items: services.map((s, i) => ({ id: svc.items?.[i]?.id, title: s.title[l], description: s.description[l] })) },
+      data: { items: services.map((s, i) => ({ id: svc.items?.[i]?.id, tag: serviceTags[i][l], title: s.title[l], description: s.description[l] })) },
     })
   }
 
@@ -281,7 +377,23 @@ async function run() {
       emailNotifications: true,
     },
   })
+}
 
+async function run() {
+  const payload = await getPayload({ config })
+  const force = process.argv.includes('--force')
+  const { totalDocs } = await payload.count({ collection: 'players' })
+
+  if (force) {
+    for (const collection of ['posts', 'players', 'team', 'media'] as const) {
+      await payload.delete({ collection, where: { id: { exists: true } } })
+    }
+    await payload.updateGlobal({ slug: 'home', data: { heroImage: null, heroPlayer: null } })
+  }
+  if (!totalDocs || force) await seedCollections(payload)
+  else payload.logger.info('Players already exist; only the page texts are updated. Use `npm run seed -- --force` to start over.')
+
+  await seedGlobals(payload)
   payload.logger.info('Sample content ready. Open /admin to create the admin account if you have not yet.')
   process.exit(0)
 }

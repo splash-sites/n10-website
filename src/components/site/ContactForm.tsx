@@ -1,9 +1,11 @@
 'use client'
 
-import { useActionState, useState } from 'react'
+import { useActionState, useEffect, useState } from 'react'
 
 import { sendContact, type ContactState } from '@/app/(frontend)/[lang]/actions'
 import type { Dictionary, Locale } from '@/i18n'
+
+import { PRESELECT_EVENT } from './PreselectLink'
 
 type Who = 'player' | 'family' | 'club' | 'brand' | 'partner'
 
@@ -11,6 +13,19 @@ export function ContactForm({ lang, t, positions }: { lang: Locale; t: Dictionar
   const [who, setWho] = useState<Who>('player')
   const [state, action, pending] = useActionState<ContactState, FormData>(sendContact, { status: 'idle' })
   const show = (...types: Who[]) => types.includes(who)
+
+  // "?who=club" in the address, or a call-to-action click, picks the option
+  useEffect(() => {
+    const valid = (v: unknown): v is Who => typeof v === 'string' && v in t.types
+    const fromUrl = new URLSearchParams(window.location.search).get('who')
+    if (valid(fromUrl)) setWho(fromUrl)
+    const onPick = (e: Event) => {
+      const v = (e as CustomEvent).detail
+      if (valid(v)) setWho(v)
+    }
+    window.addEventListener(PRESELECT_EVENT, onPick)
+    return () => window.removeEventListener(PRESELECT_EVENT, onPick)
+  }, [t.types])
 
   if (state.status === 'sent') {
     return (

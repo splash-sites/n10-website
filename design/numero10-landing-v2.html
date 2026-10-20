@@ -1,0 +1,474 @@
+<title>Numéro 10 Landing v2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders:wght@600..900&family=Barlow:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: Roster identity pushed toward a modern landing page. Full-screen hero with a big photo and moving name rows, club marquee, count-up numbers, a draggable talents rail, a bento grid for services, a numbered process, a player quote, a split CTA. Black and white only. */
+:root{
+  --ink:#000000;
+  --paper:#ffffff;
+  --line:#262626;
+  --panel:#0f0f0f;
+  --dim:#2e2e2e;
+  --mute:#8a8a8a;
+  --soft:#bdbdbd;
+  --display:"Big Shoulders","Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --text:"Barlow",ui-sans-serif,"Helvetica Neue",Arial,sans-serif;
+  --gl:max(16px,env(safe-area-inset-left,0px));
+  --gr:max(16px,env(safe-area-inset-right,0px));
+  --r:18px;
+  --noise:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--text);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+button{font:inherit;color:inherit}
+p,h1,h2,h3,h4,ul,dl,dd,blockquote{margin:0}
+ul,ol{padding:0;list-style:none;margin:0}
+:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.pad{padding-left:var(--gl);padding-right:var(--gr)}
+.wrap{max-width:1440px;margin-inline:auto}
+.disp{font-family:var(--display);text-transform:uppercase;font-weight:800;line-height:.88;letter-spacing:-.005em}
+.sec{padding-block:clamp(80px,10vw,140px)}
+.eyebrow{font-size:14px;color:var(--mute);margin-bottom:18px}
+h2.disp{font-size:clamp(3rem,7.5vw,7rem)}
+.lede{color:var(--soft);max-width:46ch;font-size:18px}
+.btn{display:inline-flex;align-items:center;gap:10px;height:54px;padding:0 26px;border-radius:999px;background:var(--paper);color:var(--ink);text-decoration:none;font-weight:600;font-size:15px;border:1.5px solid var(--paper);cursor:pointer;white-space:nowrap;transition:transform .2s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--paper);border-color:rgba(255,255,255,.35)}
+.btn.ghost:hover{border-color:var(--paper)}
+.btn.dark{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.btn .dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+.photo{position:relative;background-color:#555;background-image:var(--noise),linear-gradient(var(--ang,160deg),var(--t1,#cfcfcf),var(--t2,#5d5d5d));overflow:hidden}
+.photo .lab{position:absolute;left:14px;bottom:12px;font-size:12px;color:rgba(255,255,255,.75)}
+
+/* proposal notes (not part of the site) */
+.notes-btn{position:fixed;right:calc(var(--gr) + 4px);bottom:calc(env(safe-area-inset-bottom,0px) + 16px);z-index:60;background:#fff;color:#000;border:0;border-radius:999px;height:44px;padding:0 18px;font-weight:700;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+.note-pin{position:absolute;z-index:6;background:#fff;color:#000;font:700 12px/1 var(--text);border-radius:999px;padding:7px 10px;box-shadow:0 6px 20px rgba(0,0,0,.4);white-space:nowrap}
+body:not(.show-notes) .note-pin{display:none}
+.notes{position:fixed;right:var(--gr);bottom:calc(env(safe-area-inset-bottom,0px) + 72px);z-index:60;width:min(380px,calc(100% - 32px));max-height:70vh;overflow:auto;background:#fff;color:#000;border-radius:14px;padding:20px 22px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.notes h4{font-size:15px;margin-bottom:10px}
+.notes ol{list-style:decimal;padding-left:20px;display:grid;gap:8px;font-size:14px;line-height:1.45}
+
+/* header */
+.head{position:fixed;top:0;left:0;right:0;z-index:40;padding-top:env(safe-area-inset-top,0px);transition:background .3s,backdrop-filter .3s}
+.head.solid{background:rgba(0,0,0,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.08)}
+.head .row{display:flex;align-items:center;gap:28px;height:76px}
+.logo{height:28px;width:auto;filter:invert(1);display:block}
+.head nav{margin-left:auto;display:flex;gap:4px;padding:4px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+.head nav a{text-decoration:none;font-size:14px;font-weight:500;padding:8px 14px;border-radius:999px;color:#ddd}
+.head nav a:hover{background:rgba(255,255,255,.1);color:#fff}
+.head .lang{font-size:13px;font-weight:600;color:var(--mute)}
+.head .lang b{color:#fff}
+.head .btn{height:42px;padding:0 18px;font-size:14px}
+
+/* hero */
+.hero{position:relative;min-height:min(100vh,980px);display:grid;align-items:end;overflow:hidden;padding-top:120px}
+.hero .bg{position:absolute;inset:0 0 0 38%;}
+.hero .bg .photo{position:absolute;inset:0}
+.hero .bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#000 0%,rgba(0,0,0,.65) 22%,rgba(0,0,0,0) 55%),linear-gradient(0deg,#000 0%,rgba(0,0,0,0) 40%)}
+.hero .big-no{position:absolute;right:-2vw;top:60px;font-family:var(--display);font-weight:900;font-size:clamp(14rem,34vw,36rem);line-height:.8;color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.22);pointer-events:none}
+.hero-inner{position:relative;z-index:2;padding-bottom:40px}
+.badge{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:6px 14px 6px 6px;font-size:14px;background:rgba(255,255,255,.04);margin-bottom:28px}
+.badge b{background:#fff;color:#000;border-radius:999px;padding:4px 10px;font-size:12px}
+.hero h1{font-family:var(--display);text-transform:uppercase;font-weight:900;font-size:clamp(3.6rem,10vw,10.5rem);line-height:.84;max-width:9ch;letter-spacing:-.01em}
+.hero h1 .line{display:block;overflow:hidden}
+.hero h1 .line span{display:block}
+.hero .sub{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end;margin-top:36px}
+.hero .sub p{font-size:19px;color:#d0d0d0;max-width:44ch}
+.hero .ctas{display:flex;gap:10px;flex-wrap:wrap}
+.hero .now{position:absolute;right:var(--gr);bottom:170px;z-index:2;display:flex;align-items:center;gap:12px;background:rgba(0,0,0,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:10px 14px 10px 10px;font-size:14px}
+.hero .now .photo{width:44px;height:56px;border-radius:8px}
+.hero .now b{display:block;font-weight:600}
+.hero .now small{color:var(--mute)}
+@media (prefers-reduced-motion:no-preference){
+  .hero h1 .line span{animation:rise .9s cubic-bezier(.2,.7,.1,1) both}
+  .hero h1 .line:nth-child(2) span{animation-delay:.08s}
+  .hero h1 .line:nth-child(3) span{animation-delay:.16s}
+  .hero .bg{animation:zoom 2.4s cubic-bezier(.2,.7,.1,1) both}
+}
+@keyframes rise{from{transform:translateY(105%)}to{transform:none}}
+@keyframes zoom{from{transform:scale(1.08);opacity:0}to{transform:none;opacity:1}}
+
+/* marquees */
+.marquee{overflow:hidden;white-space:nowrap;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.marquee .track{display:inline-flex;gap:0;animation:slide 60s linear infinite}
+.marquee.rev .track{animation-direction:reverse}
+.marquee:hover .track{animation-play-state:paused}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.names-row{font-family:var(--display);text-transform:uppercase;font-weight:900;font-size:clamp(3rem,7vw,6.5rem);line-height:1;color:var(--dim)}
+.names-row a{text-decoration:none;padding-right:.35em;transition:color .2s}
+.names-row a:hover{color:#fff}
+.names-row sup{font-size:.25em;vertical-align:top;position:relative;top:.5em;margin-left:.08em;font-weight:600}
+.roster-band{border-block:1px solid var(--line);padding-block:18px;display:grid;gap:6px}
+.clubs{padding-block:28px;border-bottom:1px solid var(--line)}
+.clubs .label{font-size:13px;color:var(--mute);margin-bottom:14px}
+.clubs .track span{font-family:var(--display);font-weight:700;font-size:28px;text-transform:uppercase;color:#6f6f6f;padding-right:56px}
+@media (prefers-reduced-motion:reduce){.marquee .track{animation:none}}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:26px 24px 22px;display:flex;flex-direction:column;justify-content:space-between;min-height:200px}
+.stat dd{font-family:var(--display);font-weight:900;font-size:clamp(4rem,7vw,6.5rem);line-height:.85;font-variant-numeric:tabular-nums}
+.stat dt{color:var(--soft);font-size:15px;max-width:22ch}
+
+/* talents rail */
+.rail-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:28px}
+.rail-ctrl{display:flex;gap:8px;align-items:center}
+.circle{width:52px;height:52px;border-radius:50%;border:1.5px solid rgba(255,255,255,.3);background:none;cursor:pointer;display:grid;place-items:center;font-size:20px}
+.circle:hover{border-color:#fff}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px}
+.chips button{border:1px solid var(--line);background:none;color:var(--soft);border-radius:999px;padding:8px 16px;cursor:pointer;font-size:14px}
+.chips button[aria-pressed="true"]{background:#fff;color:#000;border-color:#fff}
+.rail{display:grid;grid-auto-flow:column;grid-auto-columns:clamp(240px,24vw,340px);gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:16px;scrollbar-width:thin;scrollbar-color:#444 transparent;cursor:grab}
+.rail.drag{cursor:grabbing;scroll-snap-type:none}
+.tcard{scroll-snap-align:start;text-decoration:none;display:block;user-select:none}
+.tcard .photo{aspect-ratio:3/4;border-radius:var(--r)}
+.tcard .photo::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.75),rgba(0,0,0,0) 45%)}
+.tcard .n{position:absolute;top:10px;left:16px;font-family:var(--display);font-weight:900;font-size:4.5rem;line-height:1;color:transparent;-webkit-text-stroke:1.5px #fff;z-index:1}
+.tcard .info{position:absolute;left:16px;right:16px;bottom:14px;z-index:1}
+.tcard .nm{font-family:var(--display);text-transform:uppercase;font-weight:800;font-size:2rem;line-height:.95}
+.tcard .mt{font-size:13px;color:#ccc;margin-top:6px;display:flex;justify-content:space-between;gap:8px}
+.tcard .go{position:absolute;top:14px;right:14px;z-index:1;width:40px;height:40px;border-radius:50%;background:#fff;color:#000;display:grid;place-items:center;font-weight:700;transform:scale(.8);opacity:0;transition:.2s}
+.tcard:hover .go,.tcard:focus-visible .go{transform:none;opacity:1}
+.rail-foot{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:20px;flex-wrap:wrap}
+.progress{flex:1;max-width:420px;height:2px;background:var(--line);border-radius:2px;overflow:hidden}
+.progress i{display:block;height:100%;width:20%;background:#fff;transition:width .15s}
+
+/* bento */
+.bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:minmax(220px,auto);gap:12px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:28px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;position:relative;overflow:hidden;min-width:0}
+.tile h3{font-family:var(--display);text-transform:uppercase;font-weight:800;font-size:clamp(1.9rem,2.8vw,2.6rem);line-height:.92}
+.tile p{color:var(--soft);max-width:40ch}
+.tile .tag{font-size:13px;color:var(--mute)}
+.t1{grid-column:span 4;grid-row:span 2;background:#fff;color:#000;border-color:#fff}
+.t1 p{color:#333}
+.t1 h3{font-size:clamp(2.6rem,5vw,4.8rem)}
+.t1 .tag{color:#666}
+.t1 .photo{position:absolute;right:28px;bottom:28px;width:min(42%,300px);aspect-ratio:3/4;border-radius:12px}
+.t2,.t3{grid-column:span 2}
+.t4,.t5{grid-column:span 3}
+.t5 .photo{position:absolute;inset:0;opacity:.35}
+.t5 > *{position:relative}
+
+/* process */
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;counter-reset:s}
+.step{border-top:2px solid #fff;padding-top:22px}
+.step .no{font-family:var(--display);font-weight:900;font-size:3.5rem;line-height:1;color:var(--dim)}
+.step h3{font-family:var(--display);text-transform:uppercase;font-weight:800;font-size:1.9rem;line-height:.95;margin-top:14px}
+.step p{color:var(--soft);margin-top:10px;font-size:15px}
+
+/* quote */
+.quote{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,5vw,80px);align-items:center}
+.quote .photo{aspect-ratio:4/5;border-radius:var(--r)}
+.quote blockquote{font-family:var(--display);text-transform:uppercase;font-weight:800;font-size:clamp(2.2rem,4.6vw,4.4rem);line-height:.95;text-wrap:balance}
+.quote .who{margin-top:28px;display:flex;align-items:center;gap:14px}
+.quote .who b{display:block}
+.quote .who small{color:var(--mute)}
+.quote .dots{display:flex;gap:6px;margin-top:36px}
+.quote .dots button{width:28px;height:4px;border-radius:2px;border:0;background:var(--dim);cursor:pointer;padding:0}
+.quote .dots button[aria-pressed="true"]{background:#fff}
+
+/* journal */
+.jgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.post{text-decoration:none;display:flex;flex-direction:column;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:12px 12px 22px;transition:border-color .2s}
+.post:hover{border-color:#555}
+.post .photo{aspect-ratio:16/11;border-radius:12px}
+.post .k{font-size:13px;color:var(--mute);padding-inline:8px}
+.post h3{font-family:var(--display);text-transform:uppercase;font-weight:800;font-size:1.8rem;line-height:.95;padding-inline:8px}
+
+/* split CTA */
+.split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.cta{border-radius:var(--r);padding:clamp(28px,4vw,52px);min-height:420px;display:flex;flex-direction:column;justify-content:space-between;gap:32px;text-decoration:none;position:relative;overflow:hidden}
+.cta.w{background:#fff;color:#000}
+.cta.b{background:var(--panel);border:1px solid var(--line)}
+.cta h3{font-family:var(--display);text-transform:uppercase;font-weight:900;font-size:clamp(3rem,6vw,5.8rem);line-height:.85}
+.cta p{max-width:36ch;font-size:17px}
+.cta.w p{color:#333}
+.cta.b p{color:var(--soft)}
+.cta .arrow{position:absolute;right:clamp(28px,4vw,52px);top:clamp(28px,4vw,52px);width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:26px;transition:transform .25s}
+.cta.w .arrow{background:#000;color:#fff}
+.cta.b .arrow{background:#fff;color:#000}
+.cta:hover .arrow{transform:rotate(-45deg)}
+
+/* footer */
+.foot{padding-block:80px 40px;border-top:1px solid var(--line)}
+.foot .top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:32px}
+.foot .nl{display:flex;gap:8px;flex-wrap:wrap}
+.foot .nl input{height:54px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:#fff;padding:0 20px;font:inherit;min-width:0;width:min(320px,100%)}
+.foot .logo-xl{margin-top:72px;width:100%;height:auto;filter:invert(1);opacity:.95}
+.foot .legal{margin-top:28px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;font-size:13px;color:var(--mute)}
+
+.reveal{opacity:1;transform:none}
+@media (prefers-reduced-motion:no-preference){
+  .js .reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.7,.1,1)}
+  .js .reveal.in{opacity:1;transform:none}
+}
+
+@media (max-width:1100px){
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .bento{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .t1{grid-column:span 2;grid-row:auto;min-height:440px}
+  .t2,.t3,.t4,.t5{grid-column:span 1}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:36px}
+  .jgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:820px){
+  .head nav,.head .lang{display:none}
+  .head .btn{margin-left:auto}
+  .hero .bg{inset:0}
+  .hero .bg::after{background:linear-gradient(0deg,#000 10%,rgba(0,0,0,.4) 60%,rgba(0,0,0,.2))}
+  .hero .now{display:none}
+  .hero .sub,.quote,.split{grid-template-columns:minmax(0,1fr)}
+  .t1 .photo{display:none}
+  .bento{grid-template-columns:minmax(0,1fr)}
+  .t1,.t2,.t3,.t4,.t5{grid-column:auto}
+  .jgrid{grid-template-columns:minmax(0,1fr)}
+  .cta{min-height:320px}
+}
+@media (max-width:520px){
+  .stats,.steps{grid-template-columns:minmax(0,1fr)}
+  .stat{min-height:150px}
+}
+</style>
+
+<button class="notes-btn" type="button" id="notesBtn" aria-expanded="false">What changed</button>
+<div class="notes" id="notes" hidden>
+  <h4>Changes from the current site</h4>
+  <ol>
+    <li>Full-screen hero with one large player photo, a three-line headline that slides in, and a "now playing" card.</li>
+    <li>The wall of names becomes two rows that move in opposite directions. Hover pauses them.</li>
+    <li>New strip with the clubs where the players are right now.</li>
+    <li>Numbers in large tiles that count up when they appear.</li>
+    <li>Talents in a draggable rail of large cards, with arrows, filter and a progress bar. The full list stays at /talents.</li>
+    <li>Services as a bento grid with one large white tile.</li>
+    <li>New "How we work" section in four steps.</li>
+    <li>Quotes from players and clubs, with dots to switch.</li>
+    <li>Journal as cards with cover photos.</li>
+    <li>Two big calls to action: one for players and families, one for clubs and brands.</li>
+    <li>Glass header that turns solid on scroll, rounded buttons, the logo across the full width of the footer.</li>
+  </ol>
+  <p style="font-size:13px;color:#555;margin-top:12px">The white labels on the page mark each change. Everything new is editable in the panel.</p>
+</div>
+
+<header class="head pad" id="head">
+  <div class="wrap row">
+    <img class="logo" src="n10-logo.png" alt="Numéro 10">
+    <nav aria-label="Main"><a href="#talents">Talents</a><a href="#services">What we do</a><a href="#process">How we work</a><a href="#journal">Journal</a></nav>
+    <span class="lang"><b>EN</b> FR NL</span>
+    <a class="btn" href="#contact"><span class="dot"></span>Contact us</a>
+  </div>
+</header>
+
+<main>
+<section class="hero pad">
+  <span class="note-pin" style="left:var(--gl);top:100px">1. Full-screen hero</span>
+  <div class="bg" aria-hidden="true"><div class="photo" style="--t1:#d8d8d8;--t2:#2a2a2a;--ang:200deg"><span class="lab" style="left:auto;right:16px;top:96px;bottom:auto">Hero photo: Ilyas Benali, full colour shot shown in B/W</span></div></div>
+  <span class="big-no" aria-hidden="true">10</span>
+  <div class="wrap hero-inner">
+    <span class="badge"><b>New</b> Ilyas Benali extends with KRC Genk until 2029</span>
+    <h1><span class="line"><span>Careers</span></span><span class="line"><span>built for</span></span><span class="line"><span>the long run</span></span></h1>
+    <div class="sub">
+      <p>Numéro 10 is a FIFA-licensed agency in Belgium. We represent twenty footballers and look after their contracts, their next move and everything off the pitch.</p>
+      <div class="ctas"><a class="btn" href="#talents">See our talents</a><a class="btn ghost" href="#contact">Talk to an agent</a></div>
+    </div>
+  </div>
+  <div class="now"><div class="photo" style="--t1:#ccc;--t2:#444"></div><div><b>Ilyas Benali, No. 10</b><small>Attacking midfielder, KRC Genk</small></div></div>
+</section>
+
+<section class="roster-band" aria-label="All players" style="position:relative">
+  <span class="note-pin" style="right:var(--gr);top:-14px">2. Moving roster</span>
+  <div class="marquee"><div class="track names-row" id="row1"></div></div>
+  <div class="marquee rev"><div class="track names-row" id="row2"></div></div>
+</section>
+
+<section class="clubs pad" style="position:relative">
+  <span class="note-pin" style="right:var(--gr);top:12px">3. Clubs strip</span>
+  <div class="wrap"><p class="label">Our players play at</p></div>
+  <div class="marquee"><div class="track" id="clubs"></div></div>
+</section>
+
+<section class="pad sec" style="position:relative">
+  <span class="note-pin" style="left:var(--gl);top:60px">4. Count-up numbers</span>
+  <div class="wrap">
+    <dl class="stats">
+      <div class="stat reveal"><dd data-count="20">0</dd><dt>Professional players represented</dt></div>
+      <div class="stat reveal"><dd data-count="13">0</dd><dt>Nationalities in the roster</dt></div>
+      <div class="stat reveal"><dd data-count="5">0</dd><dt>Leagues across Europe</dt></div>
+      <div class="stat reveal"><dd data-count="2">0</dd><dt>Days to answer every message</dt></div>
+    </dl>
+  </div>
+</section>
+
+<section class="pad sec" id="talents" style="padding-top:0;position:relative">
+  <span class="note-pin" style="right:var(--gr);top:-14px">5. Talents rail</span>
+  <div class="wrap">
+    <div class="rail-head">
+      <div><p class="eyebrow">Our talents</p><h2 class="disp reveal">Twenty players,<br>one roster</h2></div>
+      <div class="rail-ctrl"><button class="circle" type="button" id="prev" aria-label="Previous players">‹</button><button class="circle" type="button" id="next" aria-label="Next players">›</button></div>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="rail" id="rail" tabindex="0" aria-label="Players, scroll sideways"></div>
+    <div class="rail-foot"><div class="progress"><i id="prog"></i></div><a class="btn ghost" href="#talents">Full list with filters</a></div>
+  </div>
+</section>
+
+<section class="pad sec" id="services" style="padding-top:0;position:relative">
+  <span class="note-pin" style="right:var(--gr);top:-14px">6. Bento services</span>
+  <div class="wrap">
+    <p class="eyebrow">What we do</p>
+    <h2 class="disp reveal" style="margin-bottom:40px">On the pitch<br>and off it</h2>
+    <div class="bento">
+      <article class="tile t1 reveal"><div><p class="tag">Core service</p><h3 style="margin-top:12px">Sports<br>representation</h3></div><p>Transfers, loans and contract renewals, negotiated with clubs. We are in the room for every conversation about the player's future.</p><div class="photo" style="--t1:#bbb;--t2:#555"></div></article>
+      <article class="tile t2 reveal"><p class="tag">Planning</p><div><h3>Career strategy</h3><p style="margin-top:10px">A plan for the next three seasons, reviewed before every window.</p></div></article>
+      <article class="tile t3 reveal"><p class="tag">Protection</p><div><h3>Legal and financial</h3><p style="margin-top:10px">Contract review, tax and long-term planning with advisers we trust.</p></div></article>
+      <article class="tile t4 reveal"><p class="tag">Visibility</p><div><h3>Image and communication</h3><p style="margin-top:10px">Media training, social channels and press requests.</p></div></article>
+      <article class="tile t5 reveal"><div class="photo" style="--t1:#999;--t2:#222"></div><p class="tag">Partners</p><div><h3>Commercial partnerships</h3><p style="margin-top:10px">Boot deals, brand partnerships and appearances that suit the player.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="pad sec" id="process" style="padding-top:0;position:relative">
+  <span class="note-pin" style="right:var(--gr);top:-14px">7. How we work</span>
+  <div class="wrap">
+    <p class="eyebrow">How we work</p>
+    <h2 class="disp reveal" style="margin-bottom:48px">From first call<br>to signed contract</h2>
+    <ol class="steps">
+      <li class="step reveal"><span class="no">01</span><h3>We meet</h3><p>With the player and the family, at home or at the club. No contract on the first day.</p></li>
+      <li class="step reveal"><span class="no">02</span><h3>We plan</h3><p>Where the player is now, where he can be in three seasons, and what has to happen first.</p></li>
+      <li class="step reveal"><span class="no">03</span><h3>We negotiate</h3><p>With clubs, sponsors and lawyers. The player decides; we make sure every option is on the table.</p></li>
+      <li class="step reveal"><span class="no">04</span><h3>We stay</h3><p>After the signature we follow every match, every injury and every window.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="pad sec" style="padding-top:0;position:relative">
+  <span class="note-pin" style="right:var(--gr);top:-14px">8. Quotes</span>
+  <div class="wrap quote">
+    <div class="photo reveal" id="qPhoto" style="--t1:#d0d0d0;--t2:#3a3a3a"></div>
+    <div>
+      <p class="eyebrow">What players say</p>
+      <blockquote id="qText">They told me to stay one more season when everyone else said leave. It was the right call.</blockquote>
+      <div class="who"><div><b id="qWho">Jonas Claes</b><small id="qRole">Striker, Union Saint-Gilloise</small></div></div>
+      <div class="dots" id="qDots"></div>
+      <p style="font-size:12px;color:var(--mute);margin-top:18px">Sample quotes. Real ones come from the players and are added in the panel.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pad sec" id="journal" style="padding-top:0;position:relative">
+  <span class="note-pin" style="right:var(--gr);top:-14px">9. Journal cards</span>
+  <div class="wrap">
+    <div class="rail-head"><div><p class="eyebrow">Journal</p><h2 class="disp reveal">Latest news</h2></div><a class="btn ghost" href="#journal">All articles</a></div>
+    <div class="jgrid" id="jgrid"></div>
+  </div>
+</section>
+
+<section class="pad sec" id="contact" style="padding-top:0;position:relative">
+  <span class="note-pin" style="right:var(--gr);top:-14px">10. Split call to action</span>
+  <div class="wrap split">
+    <a class="cta w reveal" href="#contact"><span class="arrow">→</span><p style="font-weight:600">For players and families</p><div><h3>Start your<br>next chapter</h3><p style="margin-top:16px">Tell us about your season and your plans. An agent answers within two working days.</p></div></a>
+    <a class="cta b reveal" href="#contact"><span class="arrow">→</span><p style="font-weight:600">For clubs and brands</p><div><h3>Work with<br>our players</h3><p style="margin-top:16px">Transfers, loans and partnerships. Ask for a profile or a meeting.</p></div></a>
+  </div>
+</section>
+</main>
+
+<footer class="pad foot" style="position:relative">
+  <span class="note-pin" style="right:var(--gr);top:20px">11. Footer logo</span>
+  <div class="wrap">
+    <div class="top">
+      <div><h2 class="disp" style="font-size:clamp(2.5rem,5vw,4rem)">Agency news,<br>once a month</h2><p class="lede" style="margin-top:14px">Signings and articles from the journal. No other email.</p></div>
+      <form class="nl" onsubmit="event.preventDefault();this.querySelector('button').textContent='Subscribed'"><input type="email" id="nl-email" placeholder="Your email" aria-label="Your email"><button class="btn" type="submit">Subscribe</button></form>
+    </div>
+    <img class="logo-xl" src="n10-logo.png" alt="Numéro 10">
+    <div class="legal"><span>© 2026 Numéro 10. FIFA football agent, licence 202X-0000</span><span>Brussels, Belgium</span><span>Design proposal v2. Photos and figures are placeholders.</span></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+document.documentElement.classList.add("js");
+const P = [
+  ["Arno Verbeke",1,"GK","Goalkeeper","KAA Gent",24],["Moussa Ndiaye",30,"GK","Goalkeeper","RWD Molenbeek",21],
+  ["Jens Van Acker",2,"DEF","Right back","Club Brugge",23],["Ibrahim Touré",4,"DEF","Centre back","Standard Liège",27],
+  ["Mathis Lefèvre",5,"DEF","Centre back","RC Lens",25],["Noah Peeters",3,"DEF","Left back","KRC Genk",20],
+  ["Kofi Mensah",22,"DEF","Right back","FC Utrecht",21],["Daan de Wit",15,"DEF","Centre back","Sparta Rotterdam",26],
+  ["Yassine El Amrani",6,"MID","Defensive midfielder","Royal Antwerp FC",24],["Rafael Couto",8,"MID","Central midfielder","Vitória SC",25],
+  ["Ilyas Benali",10,"MID","Attacking midfielder","KRC Genk",22],["Teo Marchetti",14,"MID","Central midfielder","KV Mechelen",23],
+  ["Samuel Kabongo",18,"MID","Central midfielder","RSC Anderlecht",17],["Lars Jacobs",23,"MID","Defensive midfielder","OH Leuven",28],
+  ["Amadou Sow",7,"FWD","Right winger","Stade de Reims",23],["Jonas Claes",9,"FWD","Striker","Union Saint-Gilloise",26],
+  ["Bilal Haddadi",11,"FWD","Left winger","Cercle Brugge",21],["Nathan Mbemba",17,"FWD","Striker","SV Zulte Waregem",24],
+  ["Emil Sørensen",19,"FWD","Striker","AGF Aarhus",24],["Leandro Pires",21,"FWD","Right winger","KVC Westerlo",20]
+].map(([name,n,g,pos,club,age],i)=>({name,n,g,pos,club,age,i}));
+const tone=(i,dark)=>{const r=k=>{const x=Math.sin((i+1)*91.7+k*13.3)*43758.5;return x-Math.floor(x)};const a=dark?60+Math.round(r(1)*40):175+Math.round(r(1)*55),b=dark?10+Math.round(r(2)*20):50+Math.round(r(2)*60);return `--t1:rgb(${a},${a},${a});--t2:rgb(${b},${b},${b});--ang:${140+Math.round(r(3)*60)}deg`};
+const last=p=>p.name.split(" ").slice(-1)[0];
+
+/* moving rows: content doubled so the loop is seamless */
+const half=(arr)=>arr.map(p=>`<a href="#talents">${last(p)}<sup>${p.n}</sup></a>`).join("");
+const a=P.slice(0,10), b=P.slice(10);
+document.getElementById("row1").innerHTML = half(a)+half(a);
+document.getElementById("row2").innerHTML = half(b)+half(b);
+const clubs=[...new Set(P.map(p=>p.club))];
+document.getElementById("clubs").innerHTML = (clubs.map(c=>`<span>${c}</span>`).join("")).repeat(2);
+
+/* rail */
+let filter="ALL";
+const G=[["ALL","All 20"],["GK","Goalkeepers"],["DEF","Defenders"],["MID","Midfielders"],["FWD","Forwards"]];
+const chips=document.getElementById("chips"), rail=document.getElementById("rail"), prog=document.getElementById("prog");
+function render(){
+  chips.innerHTML=G.map(([k,l])=>`<button type="button" data-g="${k}" aria-pressed="${k===filter}">${l}</button>`).join("");
+  rail.innerHTML=P.filter(p=>filter==="ALL"||p.g===filter).map(p=>`
+    <a class="tcard" href="#talents" draggable="false"><div class="photo" style="${tone(p.i)}"><span class="n">${p.n}</span><span class="go" aria-hidden="true">↗</span>
+      <div class="info"><p class="nm">${p.name}</p><p class="mt"><span>${p.pos}, ${p.club}</span><span>${p.age}</span></p></div></div></a>`).join("");
+  rail.scrollLeft=0; upd();
+}
+chips.addEventListener("click",e=>{const btn=e.target.closest("button");if(!btn)return;filter=btn.dataset.g;render();});
+function upd(){const max=rail.scrollWidth-rail.clientWidth;const vis=rail.clientWidth/rail.scrollWidth;prog.style.width=Math.max(vis,max>0?vis+(1-vis)*(rail.scrollLeft/max):1)*100+"%";}
+rail.addEventListener("scroll",upd,{passive:true});
+const step=()=>rail.querySelector(".tcard")?.offsetWidth+14||300;
+document.getElementById("prev").onclick=()=>rail.scrollBy({left:-step()*2,behavior:"smooth"});
+document.getElementById("next").onclick=()=>rail.scrollBy({left:step()*2,behavior:"smooth"});
+let down=false,sx=0,sl=0,moved=false;
+rail.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse")return;down=true;moved=false;sx=e.clientX;sl=rail.scrollLeft;rail.classList.add("drag");});
+window.addEventListener("pointermove",e=>{if(!down)return;const dx=e.clientX-sx;if(Math.abs(dx)>4)moved=true;rail.scrollLeft=sl-dx;});
+window.addEventListener("pointerup",()=>{down=false;rail.classList.remove("drag");});
+rail.addEventListener("click",e=>{if(moved){e.preventDefault();moved=false;}},true);
+render();
+
+/* quotes */
+const Q=[
+  ["They told me to stay one more season when everyone else said leave. It was the right call.","Jonas Claes","Striker, Union Saint-Gilloise",15],
+  ["My parents had every question answered before I signed anything.","Noah Peeters","Left back, KRC Genk",5],
+  ["When we ask for a profile, we get the facts, the video and an honest answer the same week.","Sporting director","Jupiler Pro League club",44]
+];
+let qi=0;const qd=document.getElementById("qDots");
+function q(i){qi=i;const [t,w,r,s]=Q[i];document.getElementById("qText").textContent=t;document.getElementById("qWho").textContent=w;document.getElementById("qRole").textContent=r;document.getElementById("qPhoto").setAttribute("style",tone(s));qd.innerHTML=Q.map((_,k)=>`<button type="button" aria-label="Quote ${k+1}" aria-pressed="${k===i}"></button>`).join("");}
+qd.addEventListener("click",e=>{const btn=e.target.closest("button");if(btn)q([...qd.children].indexOf(btn));});
+q(0);
+
+/* journal */
+const J=[["Signing, 14 Oct 2026","Ilyas Benali extends with KRC Genk until 2029"],["Insight, 2 Oct 2026","What clubs look at before signing a 19-year-old"],["Agency, 21 Sep 2026","Why we sign fewer players than we are offered"]];
+document.getElementById("jgrid").innerHTML=J.map(([k,t],i)=>`<a class="post reveal" href="#journal"><div class="photo" style="${tone(60+i)}"></div><p class="k">${k}</p><h3>${t}</h3></a>`).join("");
+
+/* header turns solid after the hero */
+const head=document.getElementById("head");
+const onScroll=()=>head.classList.toggle("solid",scrollY>40);
+addEventListener("scroll",onScroll,{passive:true});onScroll();
+
+/* reveal + count-up, visible by default if observers are unavailable */
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const count=(el)=>{const to=+el.dataset.count;if(reduce){el.textContent=to;return;}const t0=performance.now();const f=t=>{const k=Math.min(1,(t-t0)/1200);el.textContent=Math.round(to*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f);};requestAnimationFrame(f);};
+if("IntersectionObserver" in window){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;e.target.classList.add("in");e.target.querySelectorAll("[data-count]").forEach(count);io.unobserve(e.target);}),{threshold:.15});
+  document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+  setTimeout(()=>document.querySelectorAll(".reveal:not(.in)").forEach(el=>{const r=el.getBoundingClientRect();if(r.top<innerHeight){el.classList.add("in");el.querySelectorAll("[data-count]").forEach(count);}}),600);
+}else{document.querySelectorAll(".reveal").forEach(el=>el.classList.add("in"));document.querySelectorAll("[data-count]").forEach(el=>el.textContent=el.dataset.count);}
+
+/* notes */
+const nb=document.getElementById("notesBtn"),nn=document.getElementById("notes");
+nb.onclick=()=>{const open=nn.hidden;nn.hidden=!open;document.body.classList.toggle("show-notes",open);nb.setAttribute("aria-expanded",open);nb.textContent=open?"Hide notes":"What changed";};
+})();
+</script>

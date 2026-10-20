@@ -7,11 +7,22 @@ import { useEffect, useState } from 'react'
 
 import { locales, type Dictionary, type Locale } from '@/i18n'
 
-export function Header({ lang, t }: { lang: Locale; t: Dictionary['nav'] }) {
+type Props = { lang: Locale; t: Dictionary['nav']; l: Dictionary['landing'] }
+
+// Glass header that turns solid once the page scrolls.
+export function Header({ lang, t, l }: Props) {
   const [open, setOpen] = useState(false)
+  const [solid, setSolid] = useState(false)
   const pathname = usePathname() || `/${lang}`
   const rest = pathname.split('/').slice(2).join('/')
   const base = `/${lang}`
+
+  useEffect(() => {
+    const onScroll = () => setSolid(window.scrollY > 40)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
@@ -21,19 +32,19 @@ export function Header({ lang, t }: { lang: Locale; t: Dictionary['nav'] }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
 
-  const links = [
-    ['talents', t.talents],
-    ['services', t.services],
-    ['team', t.team],
-    ['journal', t.journal],
-    ['contact', t.contact],
-  ] as const
+  const links: [string, string][] = [
+    [`${base}/talents`, t.talents],
+    [`${base}#services`, t.services],
+    [`${base}#process`, l.howWeWork],
+    [`${base}#team`, t.team],
+    [`${base}/journal`, t.journal],
+  ]
 
   const langSwitch = (
     <div className="lang" role="group" aria-label="Language">
-      {locales.map((l) => (
-        <Link key={l} href={`/${l}${rest ? `/${rest}` : ''}`} aria-current={l === lang ? 'true' : undefined} hrefLang={l} lang={l}>
-          {l.toUpperCase()}
+      {locales.map((code) => (
+        <Link key={code} href={`/${code}${rest ? `/${rest}` : ''}`} aria-current={code === lang ? 'true' : undefined} hrefLang={code} lang={code}>
+          {code.toUpperCase()}
         </Link>
       ))}
     </div>
@@ -41,19 +52,23 @@ export function Header({ lang, t }: { lang: Locale; t: Dictionary['nav'] }) {
 
   return (
     <>
-      <header className="head pad">
+      <header className={`head pad${solid || rest ? ' solid' : ''}`}>
         <div className="wrap row">
           <Link href={base} aria-label={`Numéro 10, ${t.home}`}>
             <img className="logo" src="/n10-logo.png" alt="Numéro 10" width={86} height={37} />
           </Link>
           <nav aria-label="Main">
-            {links.map(([id, label]) => (
-              <Link key={id} href={id === 'journal' ? `${base}/journal` : `${base}#${id}`}>
+            {links.map(([href, label]) => (
+              <Link key={href} href={href}>
                 {label}
               </Link>
             ))}
           </nav>
           {langSwitch}
+          <Link className="btn btn-sm head-cta" href={`${base}#contact`}>
+            <span className="dot" />
+            {l.contactUs}
+          </Link>
           <button className="menu-btn" type="button" onClick={() => setOpen(true)} aria-expanded={open}>
             {t.menu}
           </button>
@@ -64,8 +79,8 @@ export function Header({ lang, t }: { lang: Locale; t: Dictionary['nav'] }) {
           <button className="close" type="button" onClick={() => setOpen(false)}>
             {t.close}
           </button>
-          {links.map(([id, label]) => (
-            <Link key={id} href={id === 'journal' ? `${base}/journal` : `${base}#${id}`} onClick={() => setOpen(false)}>
+          {[...links, [`${base}#contact`, t.contact] as [string, string]].map(([href, label]) => (
+            <Link key={href} href={href} onClick={() => setOpen(false)}>
               {label}
             </Link>
           ))}

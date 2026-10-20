@@ -19,11 +19,11 @@ Open http://localhost:3000 for the site and http://localhost:3000/admin for the 
 
 | Panel section | Website |
 | --- | --- |
-| Content › Talents | Roster wall, talents list and `/talents/<name>` profiles. Drag to reorder. A player under 18 can only be published with the family-consent box ticked. |
-| Content › Journal | `/journal` and articles. Drafts autosave; a future publication date keeps an article hidden until then. |
+| Content › Talents | Moving roster, talents rail, `/talents` list and `/talents/<name>` profiles. Drag to reorder. A player under 18 can only be published with the family-consent box ticked. |
+| Content › Journal | Journal cards, `/journal` and articles. Drafts autosave; a future publication date keeps an article hidden until then. |
 | Content › Team | Our team section |
-| Pages › Homepage | Hero intro and buttons, section titles, show/hide each section |
-| Pages › What we do | The services |
+| Pages › Homepage | Hero (headline, photo, featured player, badge, buttons), numbers, how we work, quotes, the two calls to action, and the title/label/intro or visibility of every section |
+| Pages › What we do | The services bento. The first service gets the large white tile. |
 | Agency › Settings | Contact details, FIFA licence, email notifications, Instagram feed, SEO |
 | Inbox › Messages | Everything sent through the contact form |
 

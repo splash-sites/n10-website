@@ -50,17 +50,14 @@ export default async function LangLayout({ children, params }: { children: React
         <a className="skip" href="#main">
           Skip to content
         </a>
-        <Header lang={lang} t={t.nav} />
+        <Header lang={lang} t={t.nav} l={t.landing} />
         <main id="main">{children}</main>
         <footer className="pad foot">
           <div className="wrap">
-            <p className="disp big">
-              <Link href={`${base}#contact`}>{t.footer.talk}</Link>
-            </p>
             <div className="cols">
               <div>
                 <h4>{t.footer.agency}</h4>
-                <Link href={`${base}#talents`}>{t.nav.talents}</Link>
+                <Link href={`${base}/talents`}>{t.nav.talents}</Link>
                 <Link href={`${base}#services`}>{t.nav.services}</Link>
                 <Link href={`${base}#team`}>{t.nav.team}</Link>
                 <Link href={`${base}/journal`}>{t.nav.journal}</Link>
@@ -92,9 +89,11 @@ export default async function LangLayout({ children, params }: { children: React
                     {t.footer.licenceText} {settings.fifaLicence}
                   </p>
                 ) : null}
-                <img className="logo" src="/n10-logo.png" alt="" style={{ marginTop: 20, height: 36 }} />
               </div>
             </div>
+            <Link href={`${base}#contact`} aria-label={t.footer.talk}>
+              <img className="logo-xl" src="/n10-logo.png" alt="" width={1400} height={606} />
+            </Link>
             <div className="legal">
               <span>© {new Date().getFullYear()} Numéro 10</span>
               <Link href={`${base}/privacy`}>{t.footer.privacy}</Link>
