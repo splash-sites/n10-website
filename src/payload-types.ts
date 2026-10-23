@@ -205,7 +205,7 @@ export interface Player {
   createdAt: string;
 }
 /**
- * Photos used on the website. JPG or PNG, at least 1600 px on the long side.
+ * Photos used on the website. JPG, PNG, WebP or AVIF, at least 1600 px on the long side, up to 15 MB.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".

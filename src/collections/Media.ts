@@ -4,7 +4,7 @@ export const Media: CollectionConfig = {
   slug: 'media',
   admin: {
     group: 'Content',
-    description: 'Photos used on the website. JPG or PNG, at least 1600 px on the long side.',
+    description: 'Photos used on the website. JPG, PNG, WebP or AVIF, at least 1600 px on the long side, up to 15 MB.',
   },
   access: {
     read: () => true,
@@ -18,7 +18,8 @@ export const Media: CollectionConfig = {
     },
   ],
   upload: {
-    mimeTypes: ['image/*'],
+    // Photos only. SVG is excluded because it can carry scripts.
+    mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/avif'],
     focalPoint: true,
     imageSizes: [
       { name: 'thumb', width: 240, height: 320, position: 'centre' },

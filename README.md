@@ -38,6 +38,23 @@ Messages are saved in Inbox › Messages and emailed to the addresses in Setting
 
 The feed comes from [Behold](https://behold.so): connect the agency's Instagram account there once, create a JSON feed and paste its ID in Settings › Instagram feed. Pinned and hidden posts are set in the same tab. The section stays hidden until a feed is configured.
 
+## Security and performance checks
+
+`npm run test:unit` checks the contact-form rules (validation, spam trap, rate limit).
+
+`npm run test:audit` runs 93 checks against a running production build: access rules on the API, single admin, login lockout, upload limits, security headers, cron secret, contact form, plus response times, Core Web Vitals (LCP, FCP, CLS), page weight and image optimization for the site and the panel. It registers a test admin and sends messages, so point it at a throwaway database:
+
+```bash
+cp numero10.db audit.db
+DATABASE_URL=file:./audit.db CRON_SECRET=audit-cron-secret npm run build
+DATABASE_URL=file:./audit.db CRON_SECRET=audit-cron-secret npx next start -p 3100
+AUDIT_BASE=http://localhost:3100 CRON_SECRET=audit-cron-secret npm run test:audit
+```
+
+The first time, install the browser it uses: `npx playwright install chromium-headless-shell`.
+
+Known and accepted: `npm audit` still lists advisories in build and migration tooling (sass, chokidar, esbuild, drizzle-kit). They have no upstream fix yet and do not handle visitor requests. No Content-Security-Policy is set, because the Payload admin needs inline scripts.
+
 ## Deploy (Vercel + Supabase)
 
 1. **Supabase** (free plan): create a project in an EU region. Copy the *Transaction pooler* connection string. In Storage, create a public bucket called `media` and generate S3 access keys.

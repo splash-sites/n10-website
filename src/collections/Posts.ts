@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, Where } from 'payload'
 
 import { slugField } from '@/fields/slug'
 
@@ -17,7 +17,11 @@ export const Posts: CollectionConfig = {
     maxPerDoc: 20,
   },
   access: {
-    read: ({ req }) => (req.user ? true : { _status: { equals: 'published' } }),
+    // Visitors only see published articles whose date has arrived
+    read: ({ req }) =>
+      req.user
+        ? true
+        : { and: [{ _status: { equals: 'published' } }, { publishedAt: { less_than_equal: new Date().toISOString() } }] as Where[] },
   },
   defaultSort: '-publishedAt',
   fields: [

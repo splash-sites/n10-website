@@ -53,3 +53,6 @@ node_modules/
 *.db
 *.db-journal
 /media
+
+# security/performance audit database
+audit.db*

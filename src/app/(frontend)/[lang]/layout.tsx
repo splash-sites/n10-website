@@ -11,7 +11,10 @@ import { getGlobals, media } from '@/lib/data'
 
 import './styles.css'
 
-const display = Big_Shoulders({ subsets: ['latin'], weight: ['600', '800', '900'], variable: '--font-display' })
+// The display face has no metric-matched fallback, so a late swap moves the
+// big headlines. "block" keeps the text hidden for the short time the
+// (preloaded) font takes instead of showing Arial first.
+const display = Big_Shoulders({ subsets: ['latin'], weight: ['600', '800', '900'], variable: '--font-display', display: 'block' })
 const text = Barlow({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-text' })
 
 export const dynamicParams = false
@@ -92,7 +95,7 @@ export default async function LangLayout({ children, params }: { children: React
               </div>
             </div>
             <Link href={`${base}#contact`} aria-label={t.footer.talk}>
-              <img className="logo-xl" src="/n10-logo.png" alt="" width={74} height={32} />
+              <img className="logo-xl" src="/n10-logo.png" alt="" width={74} height={32} loading="lazy" />
             </Link>
             <div className="legal">
               <span>© {new Date().getFullYear()} Numéro 10</span>

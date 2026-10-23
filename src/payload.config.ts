@@ -79,6 +79,7 @@ export default buildConfig({
   collections: [Players, Posts, Team, Media, Messages, Users],
   globals: [Home, Services, Settings, Privacy],
   editor: lexicalEditor(),
+  upload: { limits: { fileSize: 15 * 1024 * 1024 } }, // 15 MB per photo
   email,
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
