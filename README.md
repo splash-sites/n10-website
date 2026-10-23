@@ -66,7 +66,7 @@ Known and accepted: `npm audit` still lists advisories in build and migration to
 7. Instagram: the account owner signs in at behold.so, connects the Business account, creates a JSON feed and pastes the feed ID in Settings › Instagram feed.
 8. Email, when the domain is known: verify the domain in Resend (SPF/DKIM records in the DNS), then add the `SMTP_*` variables and `EMAIL_FROM` in Vercel and redeploy. Until then messages are saved in the panel only.
 
-After changing a collection or global, create a migration with `DATABASE_URL=<postgres url> npm run payload migrate:create <name>` and commit it.
+After changing a collection or global, create a migration with `DATABASE_URL=<postgres url> npm run migrate:create <name>` and commit it. The script turns the storage plugin on, because it adds its own columns to the media table; a migration made without it misses them.
 
 ### Running costs and limits
 

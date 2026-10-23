@@ -18,7 +18,8 @@
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
     "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/seed.ts",
     "test:audit": "node scripts/audit.mjs",
-    "test:unit": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts tests/int/contact.int.spec.ts"
+    "test:unit": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts tests/int/contact.int.spec.ts",
+    "migrate:create": "cross-env NODE_OPTIONS=--no-deprecation S3_BUCKET=media payload migrate:create"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.92.0",
