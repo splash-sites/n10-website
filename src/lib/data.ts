@@ -90,7 +90,10 @@ export const getGlobals = cache(async (locale: Locale) => {
 export const media = (m: number | Media | null | undefined, size?: 'thumb' | 'card' | 'large') => {
   if (!m || typeof m === 'number') return null
   const sized = size ? m.sizes?.[size]?.url : null
-  return { url: sized || m.url || '', alt: m.alt || '', width: m.width ?? undefined, height: m.height ?? undefined }
+  // Payload prefixes the site address when serverURL is set; Next.js image
+  // optimization only accepts same-site files as relative paths.
+  const url = (sized || m.url || '').replace(/^https?:\/\/[^/]+(?=\/api\/media\/)/, '')
+  return { url, alt: m.alt || '', width: m.width ?? undefined, height: m.height ?? undefined }
 }
 
 export const surname = (p: Pick<Player, 'name'>) => p.name.trim().split(/\s+/).slice(-1)[0]
