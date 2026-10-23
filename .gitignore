@@ -56,3 +56,4 @@ node_modules/
 
 # security/performance audit database
 audit.db*
+uploadtest.db*

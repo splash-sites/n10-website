@@ -93,6 +93,9 @@ export default buildConfig({
     s3Storage({
       enabled: Boolean(process.env.S3_BUCKET),
       collections: { media: true },
+      // The browser sends the photo straight to Supabase (signed URL), so the
+      // Vercel 4.5 MB request limit never applies. Supabase allows CORS PUT.
+      clientUploads: true,
       bucket: process.env.S3_BUCKET || '',
       config: {
         endpoint: process.env.S3_ENDPOINT,
